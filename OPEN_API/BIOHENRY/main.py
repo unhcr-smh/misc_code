@@ -1,6 +1,6 @@
 import csv
 import json
-from operator import length_hint 
+from operator import length_hint
 import requests
 import time
 from types import SimpleNamespace
@@ -26,7 +26,7 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
     t_delta_minute = datetime.timedelta(minutes=1)
 
 
-    
+
     # my local PG connection, not being used right now --- we are using CSV files for RetScreen
     # engine = create_engine('postgresql://unhcr:unhcr@localhost:5432/eyedro_meters')
     # con = psycopg2.connect(database="eyedro_meters", user="unhcr", password="unhcr", host="localhost", port="5432")
@@ -35,10 +35,14 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
     #Nigeria - SO Ogoja 009-80AA3 --- guest house
     #Nigeria - SO Ogoja 009-80AA5 --- office --- no data 3-8 to 3-13 2023 --- we need full days
 
-    # table_names = ['00980AA5'] 
+    # table_names = ['00980AA5']
+
+    # https://login.galooli.com
+    # ID: unhcrbgl@hotmail.com
+    # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.35_ydp6hiJUBKd_mZS2_vrrHu2UsV1_Mcu-g_4hDpmYvP5V-oLd50gE8ntdYOUolXke1GVIbim2X_blQD-qGGMgdIvVEMVqD.YedQB7bpHq3CUu4GtHm8xQ.86DVpzlfAuPVypq5wW-kDKU623jnh8_RQIsEKWpM5FQHhlTBv7IB7H79sO2_4jLD9VtgtsGFao8YUaflLewm2aASYBM1TcBTgjP14Vfi3RwTWgOrIbnVXX2ec705_bqClSr-Km1HFynw7tbYDjdH1xaHmRUnkcKHTsSnyv6gZ820fshPbucMIqGlO-gVzyUPzIRORS0Rh5VRgPYWUy1UBqNRm2e4pjxLkrPgweXfFFcGpcMbT_FJy1cFHBQ1zmry673LMls01WxjaFWQwNWQBiPbupvRFuHtOZWlgLsBFwxH6KabbFW42I3v9NXkYa9MdKm_TY9P2eQqJ-Ekjw6AJw.AzA82Tcwuw6vvmVLR2CtHnDIfYJQ_R-C04kgpeHyzOI"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.lVvMnBLX9tJPMKToWfMnqsgdMLjiUknvL9kD1GoRI1kzdPg5_9rzARqhZ3sjFPaslrLkxNt4oINsVaKjHPbFRzRU4DyW1Faz.-oYGmV9V5zIow7Wy_ta09Q.b6F_gVmmjpWuLwKKBFlmV8PR1UHurWTexPds74EJyp43PaI5LFYBlrtYTSVnhSelrfp763T62mhauhrtEKvsoDmaj1hENj0BGORhPlwSi108RyFocYN2R-s02viNVE5ZJmdRNW7OVeCZRk-dLdki097dsXc2meL0eq8NBRcXYB1HJCrZsH5MJlLVIZOlXDmQSb5Aoipe0FTCU2aVl7DVabUBP4ZaU_vWUzm0BBBmsKMRnV3C9aFErfzcacRqs2jMqFZHGemugrppzXg43S6eSou79kHOqcVkP-BMHTbCYCBPfiOf-VA0Iw1kUwMFXuEVWxXSPpzi3u7mu8MUP-Y6JA.B-pp3Ry-ySIZAVNDs8os4GTTa-WbhYkSbqmk-UBDskk"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -101,7 +105,7 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
                 x = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
                 data[x.PageNumber - 1] = x.PageData
                 #####print(x.PageData)
-                
+
             response = requests.get(CancelReportUrl + x.ReportUID, headers=headers, cookies=cookies)
             #print(response)
             start = True
@@ -128,7 +132,7 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
                     formatted_datetime = utc_datetime.strftime('%Y-%m-%d %H:%M')
                     #print('AAAAAAA',dt, epoch, datetime_obj.strftime('%Y-%m-%d %H:%M'),formatted_datetime)
                     #exit()
-                                    
+
                     if start:
                         start = False
                         print('@@@@@@',z,'@@@@@@')
@@ -145,7 +149,7 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
                         #     print('MMMMMMMMMMMMMMM',meterDataWh[idx])
                         #     #print(liters)
                         #     print("Formatted datetime:", formatted_datetime)
-                    
+
                         #     liters.append({"ts":formatted_datetime, "wh": meterDataWh[idx][1],"l1":ll1, "l2":ll2, "dl1": -ttl1, "dl2": -ttl2,
                         #     ####liters.append({"ts":formatted_datetime, "wh": meterDataWh[idx][1],"l1":ll1, "l2":ll2, "dl1": ll1-dl1, "dl2": ll2-dl2, 
                         #                 "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2})
@@ -154,7 +158,7 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
                         #     ttl1 = 0
                         #     ttl2 = 0
                         #     continue
-                        
+
                     tdelta = utc_datetime - lastTs
                     ####print('TTTTTTT',tdelta, tdelta == t_delta_minute, tdelta  < datetime.timedelta(minutes=2) )
                     if l1-ll1 < 0:
@@ -192,7 +196,7 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
                                             "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2}
                                 liters.append(lastData)
                                 break
-                          
+
                             formatted_missingTs = missingTs.strftime('%Y-%m-%d %H:%M')
                             #lastData.update({'ts':formatted_missingTs})
                             #lastData.update({'epoch': missingEpoch})
@@ -208,13 +212,13 @@ def getData(year=year, month=month, day=day, date=date, offset_hrs=offset_hrs, r
                     # if l2-ll2 > 0:
                     #     ttl2 += l2-ll2
                     l1 = ll1
-                    l2 = ll2        
+                    l2 = ll2
                 print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
         else:
             print('!!!!!!!!!! Bad Response !!!!!!!!!', response)
-            
+
         print(len(liters),'############',liters[382])
-        print(len(liters),'############',liters[384])        
+        print(len(liters),'############',liters[384])
         print(len(liters),'############',liters[385])
         print(len(liters),'############',liters[386])
         fn = 'liters_%s.csv' % dtStart[0:10]
@@ -246,7 +250,7 @@ def concatenate_files_in_name_order(directory, output_file):
                          output.write('ts,wh,l1,l2,dl1,dl2,hr1,hr2,dhr1,dhr2\n')
                          start = False
                     output.write(input_file.read())
-                
+
 def ts2Epoch(dt, offset_hrs=0):
     p = '%Y-%m-%d %H:%M'
     epoch = datetime.datetime(1970, 1, 1)
@@ -266,13 +270,12 @@ This function takes as its input a meter serial number and an epoch timestamp an
 the prior day's readings (96 steps at 15-minute intervals). It returns the response as JSON text
 '''
 def meter_response(serial, timestamp):
-    
+
     ##API_BASE_URL = "https://api.eyedro.com/customcmd"
     ##USER_KEY = "UNHCRMHiYgbHda9cRv4DuPp28DnAnfeV8s6umP5R"
     USER_KEY_GET_DATA = "UNHCRp28DnAV8s6uHdMHiYgba95RcRv4DnfeuPmP"
     print('EyeDro Endpoint and Key Set')
-    
-    # Set URL with serial and timestamp, 
+    # Set URL with serial and timestamp,
     meter_url = "https://api.eyedro.com/customcmd?Cmd=Unhcr.GetData&DeviceSerial=" + str(serial) + "&DateStartSecUtc=" + str(timestamp) + f"&DateNumSteps=96&UserKey={USER_KEY_GET_DATA}"
     response = requests.get(meter_url, timeout=600)
     return json.loads(response.text)
@@ -298,14 +301,12 @@ while dd < 31:
     galooli_file_path = './liters_2023-05-%s.csv' % ('0%s' % dd)[-2:]
     output_file_path = './output1.csv'
 
-    #True for write, False for append 
+    #True for write, False for append
     header = False
     # first of month epoch
     epStart = 1682895600  + (86400 * (dd - 1))
     epEnd = epStart + 86340
 
-    
-        
     with open(input_file_path, 'r') as input_file:
         # Open the output file for writing
         with open(output_file_path, 'a') as output_file:
@@ -323,7 +324,7 @@ while dd < 31:
                     splitLine[5] = splitLine[5][0:6]
                     #print('2222222222222222',ts,dt,ep,epStart,epStart-ep)
                     #exit()
-                    
+
                     if (ep == epStart or ep == epEnd):
                         print(idx, ep, 'ZZZZZZZZ',splitLine)#ep, dt, dt.isoformat())#[0:16])
                         #splitLine[0] = dt.isoformat()[0:16]
@@ -331,7 +332,7 @@ while dd < 31:
                         #exit()
                     fuel_data.append(splitLine)
                 print(len(fuel_data), epStart, galooli_file_path, 'FFFFFFFF', fuel_data[0])
-                idx = 0    
+                idx = 0
                 for line in input_file:
                     # Modify the line (example: convert to uppercase)
                     if not header:
