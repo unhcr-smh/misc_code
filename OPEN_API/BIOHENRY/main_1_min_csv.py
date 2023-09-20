@@ -29,7 +29,7 @@ def getData(date, tz, offset_hrs, report_url):
     # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.rp_COgj_dsiMFBrbRVO5Cgv9pmKRKDHUeHH_76xPl_hp-8lQQphBDkI3MBBkfQVvZGKsXWCZjFTCHBkSGCb6EpeOdt0xLoFH.BTi_1ZdPNI1RZ66r2eoDug.KE8SH0-WGQruRjR8CYdIBf6RlSL8Wea0v8Iw8xc-iqR_g_qej_URUlHQzKycpV9_D0w-Cso8REmRzWN2gVi1B-i509L2woz9oZzSWHCl_VS83JO3_ByZZ_N0TU8AB3mwKZXtfBgwSl9e6inV1DUoeDQmMLNsXEeyqkYHqch5IGybfcTQKYJjYmC2v8rJyDfzqLi7tolQgkZTc2T_1RcNXcMtFlVJJNyBaE5S-Qv-TaISrEhrgI1yy07mJvTW2G_tFbY_JJ1MsM6YveDL602Uz3p_4PXNwKd4HG1zzcszGI5P79eoJL2zHCkjCDwFL0Q1AxqDmFi8X4OIYaihc7MXmg.Yb9B-4u1Vj8y38fWPT6Li3sN-8eqaPcl2Om_8WaJk3g"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.LU8t5tev2f5NPG_c5kr2soGBhtGm0CjDGDCOWbjKGNsyOGe523e3xkytNVqgsVrM8pcy34NXXmyt5OOj_G2df__PTS_ZiltS.377NjcehGbN_T08Jp44ZRg.xhKIrji8bnEQJ5tCmNFrmLRniHEpJ8t5zVGdoDPdw1vr5SEd6-irbC0LZcDFsqeIWYiH6Fh0VtC1NxvzWxVBNSMteNlcfsemsHeHnqiqqPM6sjjpYOJ1Sv7E4Tvd9aYtMb9IwQ4SVIPC4-labJ0-yB7BXiV4eXL1Baa503R2ZerDD46Ftlwj8pId3lAwL3WA52n2y1Cilv5Gn66XKMVl2vcR6iZI8o5l-Mk7hfN_N54OiEvdAg5kWvP7qk9y03UdaCo_TsAbkkF8JTLUrApfy6A6FsksNPaOrR_Xn_JXRs2dgFo5cXRm5Hsc_pAnEQOVOcsRr2xQJ1_Zp4AXURTHgg.Y-fwJiFiAkwa5aBRnMycKQPLQFlapGTADxLvjIpxaps"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -62,7 +62,7 @@ def getData(date, tz, offset_hrs, report_url):
         print('????????????????????????????????????????????????')
         time.sleep(2)
         response = requests.get(report_url, headers=headers, cookies=cookies)
-    if response.text:
+    if response.text and not '&error=-1' in response.text:
         x = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         print(x.NumbersOfPages)
         data = [None] * x.NumbersOfPages
@@ -193,7 +193,8 @@ def getData(date, tz, offset_hrs, report_url):
                 l2 = ll2
             print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     else:
-        print('!!!!!!!!!! Bad Response !!!!!!!!!', response)
+        print('!!!!!!!!!! Bad Response !!!!!!!!!', response.text)
+        exit()
 
     print(len(liters),'############',liters[0])
     print(len(liters),'############',liters[384])
@@ -268,11 +269,11 @@ ReportUrls = [
 # set these before calling getData()
 year = 2023
 month = 8
-day = 22
+day = 10
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-recs = 0
+recs = 1
 
 print('111111111')
 while 1 == 1:
@@ -300,7 +301,7 @@ while ddd < 31:
     ddd += 1
 
     # Open the input file for reading
-    input_file_path = './OPEN_API/BIOHENRY/data/one-minute-data_Nigeria-SO-Ogoja-Office_8-22_9-02-2023.csv'
+    input_file_path = './OPEN_API/BIOHENRY/data/eyedro/one-minute-data_Nigeria-SO-Ogoja-Office_8-22_9-02-2023.csv'
     galooli_file_path = './OPEN_API/BIOHENRY/data/liters_2023-08-%s.csv' % ('0%s' % ddd)[-2:]
     output_file_path = './OPEN_API/BIOHENRY/data/output4.csv'
     
