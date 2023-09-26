@@ -88,7 +88,7 @@ def getData(report_data, date, tz, offset_hrs):
     # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.kTphTtv_7X-aa8IQHsYLTd9_b779KIySC2BYoYBv7W3rdSEZ0ZTCo2-M8zt-INdcVDZkhnRFYvagP44q7QY_NTCgMxmZrTc9.P0dNI06OwVSA30FqSLLYJA.sFtUCBK62JHiD07VlSdCtbxEipjGP-mVa2ZO4AxlesuDob5MsT6uoOY2xQWvHackYs2JgQeBWDYobwnUG-U6TY-BQ4olCBGaFLzmx0q3fwAM1T9ePzaM3u0TTXdV9U9R_ldoL0hzg3bRVCHjzgY0bWHT8KIRx9RP0GideEiQMWY59Db8FywdvzU1OnQtkKcyrM2dn0XrKRJWuYhXkoy49teZoHyfcRXVrnTa2Fbtbt5flRAOw12N4iChIDE5dgk_JXMlS5ijsHTFE5cAOKBlAsd_2xozqw166Xvm5Y71qeo1ItrbX0ElBNK5vXxpsm7Nkz7Y2F8ztBqZuxIm7fwtrQ.1eTzu7gPq6uvWDyh7qsGrq_Sruh4-ocinUXlbakEjP0"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.b-L4Y0pz8YVfjz5l-VTMe6jbuWtC_Hh2X9IVp3kG-8qJuGYsg5IkqTbaefvbbmVeCAskzVDLz20bIjcYijO5orlNGUy-7i--.9JHdlMztPUg-FQkxNQz5xQ.QULPI_oBWq9PQr3kz6-s9LxymohG4lINiU5EZ-zYKm4rb01y6WpL3kCruket9lMrP--y7tfiCN0G78DZrgC5QE_HJiU4CU8OeRJCMhe-qU5mB9EiZ8tPdfMzrZF_tG244FxWWZEOnDn4GOv0FTW-a1aZCt8UEgYhzQO-KGQvQVwEpQfV_88wCle0okrnDrbFx-7-YFPjt6mdXrtmVBs98DJqeoWKRaOYyq9Fx9dVGxiznq3LglFrLyxhbJB0kZ6WCsIINTsTVAX7ukQgFUL6tctEsWTsj4nvlFEMH2-lNJdeLiyCHVa_9jbsE0WZ6h_W6d4YE37d1EV3UbyYPuirkA.h25dTYAMyGgoi1UrFL-hieHfk62Rl_hq2_bdwUrJ0x0"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -336,9 +336,10 @@ def meter_response(serial, timestamp):
     # pw: Unhcrbgl2009@2
 
 fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,deltahrs1,deltahrs2'
+# example with multiple GBs
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
-     {"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     
     {"site": "ABUJA", "meter_id": "00980785", "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "ADIKPO", "meter_id": "00980AAF", "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -353,11 +354,11 @@ report_data = [
 # set these before calling getData()
 year = 2023
 month = 9
-day = 3
+day = 20
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 15
+days = 6
 
 cnt_processed = 0
 site_idx = 0
