@@ -339,7 +339,7 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 # example with multiple GBs
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
-    {"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -353,12 +353,12 @@ report_data = [
 
 # set these before calling getData()
 year = 2023
-month = 9
-day = 22
+month = 8
+day = 31
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 40
+days = 60
 
 cnt_processed = 0
 site_idx = 0
@@ -401,6 +401,10 @@ while site_idx < end_idx:
         print(len(liters), liters[0],'\n', liters[0].split(','))
 
         fn = fn.replace('/galooli/', '/combined/').replace('_liters_', '%s_' % meter_ids).replace('.csv','combined.csv')
+        ######################## insert to regenerate combined file
+        # if os.path.exists(fn):
+        #     os.remove(fn)
+        ########################
         if os.path.exists(fn) and cursor is not None:
             print('File exists, delete it to get new data %s' % fn)
             ######loop = 0
@@ -495,9 +499,9 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
                     wh = 0
                     for k in list(range(0,len(kwh))):
                         wh += kwh[k][x][1]
-                    if wh < 100:
-                        dl1_sum = 0
-                        dl2_sum = 0
+                    # if wh < 100:
+                    #     dl1_sum = 0
+                    #     dl2_sum = 0
                     fuel[dl1_idx] = str(dl1_sum)[:4]
                     fuel[dl2_idx] = str(dl2_sum)[:4]
                     dt = datetime.datetime.utcfromtimestamp(fuel_epoch)
