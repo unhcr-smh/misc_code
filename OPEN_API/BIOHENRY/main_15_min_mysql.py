@@ -353,12 +353,12 @@ report_data = [
 
 # set these before calling getData()
 year = 2023
-month = 6
-day = 6
+month = 9
+day = 22
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 90
+days = 40
 
 cnt_processed = 0
 site_idx = 0
