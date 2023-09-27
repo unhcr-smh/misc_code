@@ -88,7 +88,7 @@ def getData(report_data, date, tz, offset_hrs):
     # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.b-L4Y0pz8YVfjz5l-VTMe6jbuWtC_Hh2X9IVp3kG-8qJuGYsg5IkqTbaefvbbmVeCAskzVDLz20bIjcYijO5orlNGUy-7i--.9JHdlMztPUg-FQkxNQz5xQ.QULPI_oBWq9PQr3kz6-s9LxymohG4lINiU5EZ-zYKm4rb01y6WpL3kCruket9lMrP--y7tfiCN0G78DZrgC5QE_HJiU4CU8OeRJCMhe-qU5mB9EiZ8tPdfMzrZF_tG244FxWWZEOnDn4GOv0FTW-a1aZCt8UEgYhzQO-KGQvQVwEpQfV_88wCle0okrnDrbFx-7-YFPjt6mdXrtmVBs98DJqeoWKRaOYyq9Fx9dVGxiznq3LglFrLyxhbJB0kZ6WCsIINTsTVAX7ukQgFUL6tctEsWTsj4nvlFEMH2-lNJdeLiyCHVa_9jbsE0WZ6h_W6d4YE37d1EV3UbyYPuirkA.h25dTYAMyGgoi1UrFL-hieHfk62Rl_hq2_bdwUrJ0x0"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.KYdMEExaO8ChVH4TyeeRMeBHPCXLe6aPyobHlzxKzTmvoXyoNGKB76SXv2TKwZgnNk5-JIR01JgWD_UeYtl-I6uuMOuRzg2g.hPpH6m5-YNV4K5234H1Dyg.yOwohQYjAXUlnxfV_8kQE52d6CW-3MlMi-Zdee34QyHh8VfUbO5RtKeaFbEQJOMYaVAs6bDVs0aqR4zQqz-U_O8ccL_g29SSZt0RsI5ZH-TegjSxpNFznZOOMiFq6tbjONwkEOEwEadhUvEq__1cOfh4V1QIJM1hTrKeCVFB90XXBOywYiA74Qrvc_nUNpjlQc2D-D704rtIsMVumE0KZHcoI9GHE81V531L1ja7_0JcyCvoDQySkQrvYU-SPYOnqz2rowGSj61aS1f1YuNMuet_GWHy17Hn6hLiAkpq_GVhXs8n-Xs8P51D2HifP18STVS9EV1OsNwLQiW25OUEyw.mIN0B6cy1Fy6UEQlEJRMyF6ZVsaWcxstVjTsRyK1MAM"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -339,8 +339,8 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 # example with multiple GBs
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
-    {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    
+    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BASE_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -353,8 +353,8 @@ report_data = [
 
 # set these before calling getData()
 year = 2023
-month = 8
-day = 31
+month = 9
+day = 16
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
@@ -401,7 +401,7 @@ while site_idx < end_idx:
         print(len(liters), liters[0],'\n', liters[0].split(','))
 
         fn = fn.replace('/galooli/', '/combined/').replace('_liters_', '%s_' % meter_ids).replace('.csv','combined.csv')
-        ######################## insert to regenerate combined file
+        ######################## insert to regenerate combined file 
         # if os.path.exists(fn):
         #     os.remove(fn)
         ########################
