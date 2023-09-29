@@ -88,7 +88,7 @@ def getData(report_data, date, tz, offset_hrs):
     # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.KYdMEExaO8ChVH4TyeeRMeBHPCXLe6aPyobHlzxKzTmvoXyoNGKB76SXv2TKwZgnNk5-JIR01JgWD_UeYtl-I6uuMOuRzg2g.hPpH6m5-YNV4K5234H1Dyg.yOwohQYjAXUlnxfV_8kQE52d6CW-3MlMi-Zdee34QyHh8VfUbO5RtKeaFbEQJOMYaVAs6bDVs0aqR4zQqz-U_O8ccL_g29SSZt0RsI5ZH-TegjSxpNFznZOOMiFq6tbjONwkEOEwEadhUvEq__1cOfh4V1QIJM1hTrKeCVFB90XXBOywYiA74Qrvc_nUNpjlQc2D-D704rtIsMVumE0KZHcoI9GHE81V531L1ja7_0JcyCvoDQySkQrvYU-SPYOnqz2rowGSj61aS1f1YuNMuet_GWHy17Hn6hLiAkpq_GVhXs8n-Xs8P51D2HifP18STVS9EV1OsNwLQiW25OUEyw.mIN0B6cy1Fy6UEQlEJRMyF6ZVsaWcxstVjTsRyK1MAM"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.Xn3obHVunfOoYY81BrPFCfR-Rb78McLHWZUE9oksDEjCZ7jzBzSGsbTajdWVywJBzpEugmjKZmnqCfhHOIa2nQ7Qa5kFY9u5.a4Csbd3788ECZrxreeRQgA.KUBTd6bf3o03grtFSbgnrgnstaH8p0DGqIDJlBy-cmdvj3PRd3LBJRzSv1GPKF-Dpjw-qPLuh0RKpXlNaVLUnqthBm0jgQaJ5BvLYvHHtUaq5HMhT_vjzSWDDfhKG4cUUhTCoEcCkL9F1Lf9ZfjnrNEF_5XM59K3hVoYrE2AFw228M6zFUkQJKYxj1aSfr_28HG1rqrwFw3K-qCsFD3pf8RcfAPx11HxZ6HhuSOpFq0xFJyf9xz2LDOZbnC2AsMP3vNLY_0prMYq-LdSJTucvOrKc9d1lzKBq-UeHMm_OVJ5pV3gyVrcrNCLjC1TjojmNOcx5F7IdK_-FkpzkXhEzw.CYG8tGtFF0Y4_tB0yQt1q69d-qKgyLcnq8IKkEKykOQ"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -327,6 +327,26 @@ def meter_response(serial, timestamp):
     print('!!!!!!!!!!!!!!!!!',response)
     return json.loads(response.text)
 
+def archive_data(cursor, conn):
+    #### archive data
+    dt = datetime.date.today()  - datetime.timedelta(days=30)
+    sql = "REPLACE INTO unhcr_fuel.unhcr_fuel_gb_kwh_archive SELECT * FROM unhcr_fuel.unhcr_fuel_gb_kwh WHERE start < '%s'" % dt
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        cnt = cursor.rowcount
+        print('YYYYYYYYYYYYY\n', "%s record inserted." % cnt, '\nYYYYYYYY')
+        if cnt > 0:
+            sql = "DELETE FROM unhcr_fuel.unhcr_fuel_gb_kwh WHERE start < '%s'" % dt
+            cursor.execute(sql)
+            conn.commit()
+            cnt = cursor.rowcount
+            print('YYYYYYYYYYYYY\n', "%s record deleted." % cnt, '\nYYYYYYYY')
+    except Exception as err:
+        print('EEEEEEEEE',err)
+        print(sql)
+        return False
+    return True
 # Define the URL this is for Detailed Daily report DG1 & DG2 Abuja Nigeria
 ####ReportUrl = "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s%2000%3A00%3A00&endTime=%s%2023%3A59%3A59&favoriteId=10588" % (dtStart, dtEnd)
 # Define the URL this is for Detailed Daily report DG1 & DG2 Ogoja Nigeria
@@ -352,7 +372,7 @@ report_data = [
 # set these before calling getData()
 year = 2023
 month = 9
-day = 27
+day = 28
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
@@ -365,6 +385,11 @@ site_idx = 0
 end_idx = len(report_data)
 
 cursor, conn = create_mysql_connection()
+
+res = archive_data(cursor, conn)
+if res != True:
+    exit()
+
 while site_idx < end_idx:
     meters =  report_data[site_idx]['meters']
     h = fuel_kwh_header
