@@ -56,7 +56,7 @@ def create_mysql_connection():
     #cursor = conn.cursor()
     return cursor, db_connection
 
-def getData(report_data, date, tz, offset_hrs):
+def getData(report_data, date, tz, offset_hrs, bulk = False):
     result = 0
     liters = []
     t_delta_minute = datetime.timedelta(minutes=1)
@@ -66,6 +66,8 @@ def getData(report_data, date, tz, offset_hrs):
     report_url = report_data["url"] % (dtStart, dtEnd)
     key = report_data["key"]
     fn = 'OPEN_API/BIOHENRY/data/galooli/%s_%s_liters_%s.csv' % (date.isoformat()[0:10], report_data["site"], key)
+    if bulk == True:
+        fn = fn.replace('_liters_','_bulk_')
     if os.path.exists(fn):
         print('File exists, delete it to get new data %s' % fn)
         with open(fn, 'r') as file:
@@ -88,7 +90,7 @@ def getData(report_data, date, tz, offset_hrs):
     # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.Xn3obHVunfOoYY81BrPFCfR-Rb78McLHWZUE9oksDEjCZ7jzBzSGsbTajdWVywJBzpEugmjKZmnqCfhHOIa2nQ7Qa5kFY9u5.a4Csbd3788ECZrxreeRQgA.KUBTd6bf3o03grtFSbgnrgnstaH8p0DGqIDJlBy-cmdvj3PRd3LBJRzSv1GPKF-Dpjw-qPLuh0RKpXlNaVLUnqthBm0jgQaJ5BvLYvHHtUaq5HMhT_vjzSWDDfhKG4cUUhTCoEcCkL9F1Lf9ZfjnrNEF_5XM59K3hVoYrE2AFw228M6zFUkQJKYxj1aSfr_28HG1rqrwFw3K-qCsFD3pf8RcfAPx11HxZ6HhuSOpFq0xFJyf9xz2LDOZbnC2AsMP3vNLY_0prMYq-LdSJTucvOrKc9d1lzKBq-UeHMm_OVJ5pV3gyVrcrNCLjC1TjojmNOcx5F7IdK_-FkpzkXhEzw.CYG8tGtFF0Y4_tB0yQt1q69d-qKgyLcnq8IKkEKykOQ"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.ETVU4B-Ws0g3p8nwIndZ3WZWpFrXOv4AnlvgK8eM4FGtm7uikx1kDCIj2FDIx_mX8nMztWVDeP8EqNyv6giiOPxG5k5m6z7V.c0U4k8mnDha8spszKobC8Q.kYDliChRjXQqsgnBR7s34L6rO6GO9segW7jEJ91zBScu2V-XK_QkhExR-cUIYVOGCX4x_ytxOeVpapAQFUQQHoKrjpz4o3NJP9tIFmeZidjoD2al4W2NKAhwcnoVR77U4I-y-FO18KnzLSPR4prgQWLumrRcP7G0TACfIJpcd8JLpt0tz1Oyttpy_GN2IqzzpCzi5ICGxvRDMa9tDCRS9YUDh7i0uXj3Z3QcWVjwtqjBi3AUTCcKQ8xgCJ-jqwdu1IzsM5-g4reu1EMPs_la_6cib5VhvEdacVY9WkXCt8CRyO9NlJvo9ukZ8AnDoRFaSolN5MUwtvcwtT2kBgNtNA.SRxE4R_Kq5rfoULS_mUiDZ6w_SLQvnt3_1enda4PmX8"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -132,7 +134,7 @@ def getData(report_data, date, tz, offset_hrs):
             print (idx)
             response = requests.get(GetDataUrl + x.ReportUID, headers=headers, cookies=cookies)
             print('RRRR',response)
-            if response.text is None:
+            if response.text is None or response.text == '':
                 print(idx,'????????????????????????????????????????????????')
                 time.sleep(2)
                 response = requests.get(report_url, headers=headers, cookies=cookies)
@@ -269,10 +271,16 @@ def getData(report_data, date, tz, offset_hrs):
     with open(fn, 'w', newline='') as f:
         writer = csv.writer(f)
         # write header
-        writer.writerow(["key", "start", "end", "epoch", "tankl1", "tankl2", "deltal1", "deltal2", "hrs1", "hrs2", "deltahrs1", "deltahrs2"])
-        for x in liters:
-            data = [x["key"], x["start"],x["end"],x['epoch'],x["l1"], x["l2"], x["dl1"], x["dl2"], x["hr1"], x["hr2"], x["dhr1"], x["dhr2"]]
-            writer.writerow(data)
+        if bulk:
+            writer.writerow(["key", "start", "end", "epoch", "tankl1"])
+            for x in liters:
+                data = [x["key"], x["start"],x["end"],x['epoch'],x["l1"]]
+                writer.writerow(data)
+        else:
+            writer.writerow(["key", "start", "end", "epoch", "tankl1", "tankl2", "deltal1", "deltal2", "hrs1", "hrs2", "deltahrs1", "deltahrs2"])
+            for x in liters:
+                data = [x["key"], x["start"],x["end"],x['epoch'],x["l1"], x["l2"], x["dl1"], x["dl2"], x["hr1"], x["hr2"], x["dhr1"], x["dhr2"]]
+                writer.writerow(data)
     with open(fn, 'r') as file:
         # Read the lines from the file and remove newline characters
         lines = [line.strip() for line in file.readlines()]
@@ -359,6 +367,10 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 # example with multiple GBs
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
+    
+    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    
+    
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BASE_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -371,12 +383,12 @@ report_data = [
 
 # set these before calling getData()
 year = 2023
-month = 9
-day = 28
+month = 10
+day = 3
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 1
+days = 7
 
 cnt_processed = 0
 site_idx = 0
@@ -422,10 +434,36 @@ while site_idx < end_idx:
         if len(liters) == 0:
             exit()
         #liters[0] += ',123456'
-        print(len(liters), liters[0],'\n', liters[0].split(','))
+        #print(len(liters), liters[0],'\n', liters[0].split(','))
+        if '_bulk_' in fn:
+            try:
+                sql = 'REPLACE INTO unhcr_fuel.unhcr_fuel_bulk (start, end, epoch, bulk, site_key) VALUES (%s, %s, %s, %s, %s)'
+                vals = []
+                with open(fn, 'r') as f:
+                    f.readline() # read the header
+                    for l in f.readlines():
+                        print(l)
+                        data_list = l.split(',')
+                        #print(list[12][:-1],list)
+                        key = data_list[0] + '_' +meter_ids
+                        values = [data_list[1].replace('\n',''), 
+                                  data_list[2].replace('\n',''), 
+                                  data_list[3].split('.')[0].replace('\n',''), 
+                                  data_list[4].replace('\n',''),
+                                  key]
+                        vals.append(values)
+                    cursor.executemany(sql, vals)
+                    print('YYYYYYYYYYYYY\n', "%s record inserted." % cursor.rowcount, '\nYYYYYYYY')
+                    conn.commit()
+            except Exception as e:
+                print('EEEEEEE',e, traceback.print_exc(file=sys.stdout))
+
+            loop -= 1
+            date += datetime.timedelta(days=1)
+            continue
 
         fn = fn.replace('/galooli/', '/combined/').replace('_liters_', '%s_' % meter_ids).replace('.csv','combined.csv')
-        ######################## insert to regenerate combined file 
+        ######################## insert to regenerate combined file
         # if os.path.exists(fn):
         #     os.remove(fn)
         ########################
@@ -434,6 +472,7 @@ while site_idx < end_idx:
             ######loop = 0
             #with open(fn, 'r') as file:
 
+            # not checking table size right now
             sql = '''SELECT TABLE_NAME AS `Table`,ROUND((DATA_LENGTH + INDEX_LENGTH) / 1024) AS `Size (KB)`
 FROM information_schema.TABLES
 WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
@@ -457,12 +496,12 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
                         values = [data_list[1], data_list[2], data_list[4], data_list[5],data_list[6],data_list[7],key,None,None,None,None,None,None]
                         
                         x = 7
-                        print('SSSSSSSSS', vals, len(values),len(data_list),'\n\n', data_list)
+                        #print('SSSSSSSSS', vals, len(values),len(data_list),'\n\n', data_list)
                         for y in range(12,len(data_list)):
                             values[x] = data_list[y].replace('\n','')
                             x += 1
-                            print(x,y,data_list[y])
-                        print(values)
+                            #print(x,y,data_list[y])
+                        #print(values)
                         #exit()
                         vals.append(values)
                         #print('SSSSSSSSS', len(values),vals[0],'\n\n',data_list)
@@ -510,7 +549,7 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
                     break
                 #print('11111',len(kwh),kwh[0][x][0],fuel_epoch)
 
-                while kwh[0][x][0] != fuel_epoch and fuel_idx < len_fuel:
+                while kwh[0][x][0] > fuel_epoch and fuel_idx < len_fuel:
                     fuel = liters[fuel_idx].split(',')
                     fuel_epoch = int(fuel[3].split('.')[0]) - offset_hrs *60*60
                     # 1693612800 1693609200
