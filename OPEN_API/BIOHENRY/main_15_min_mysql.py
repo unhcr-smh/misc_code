@@ -1,4 +1,5 @@
 import csv
+import decimal
 import json
 from operator import length_hint
 import requests
@@ -65,7 +66,9 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
 
     report_url = report_data["url"] % (dtStart, dtEnd)
     key = report_data["key"]
-    fn = 'OPEN_API/BIOHENRY/data/galooli/%s_%s_liters_%s.csv' % (date.isoformat()[0:10], report_data["site"], key)
+    ###########fn = 'OPEN_API/BIOHENRY/data/galooli/%s_%s_liters_%s.csv' % (date.isoformat()[0:10], report_data["site"], key)
+    #OPEN_API\BIOHENRY\data\galooli\CALABAR_BASE_TANK_.csv
+    fn = 'OPEN_API/BIOHENRY/data/galooli/%sBASE_TANK_NEW.csv' % report_data["key"]
     if bulk == True:
         fn = fn.replace('_liters_','_bulk_')
     if os.path.exists(fn):
@@ -73,7 +76,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
         with open(fn, 'r') as file:
             # Read the lines from the file and remove newline characters
             liters = [line.strip() for line in file.readlines()]
-        return [-1, fn, dtStart, liters]
+        return  gen_file_from_csv(fn.replace('TANK','TANK_CSV'), dtStart, liters)  ##[-1, fn, dtStart, liters]
     print( report_url, report_data["key"])
 
     # my local PG connection, not being used right now --- we are using CSV files for RetScreen
@@ -86,11 +89,15 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
 
     # table_names = ['00980AA5']
     # https://login.galooli.com
+    
+    # ID: hermes@unhcr.org
+    # pw: Unhcr.007
+    
     # ID: unhcrbgl@hotmail.com
     # pw: Unhcrbgl2009@2
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
-        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.ETVU4B-Ws0g3p8nwIndZ3WZWpFrXOv4AnlvgK8eM4FGtm7uikx1kDCIj2FDIx_mX8nMztWVDeP8EqNyv6giiOPxG5k5m6z7V.c0U4k8mnDha8spszKobC8Q.kYDliChRjXQqsgnBR7s34L6rO6GO9segW7jEJ91zBScu2V-XK_QkhExR-cUIYVOGCX4x_ytxOeVpapAQFUQQHoKrjpz4o3NJP9tIFmeZidjoD2al4W2NKAhwcnoVR77U4I-y-FO18KnzLSPR4prgQWLumrRcP7G0TACfIJpcd8JLpt0tz1Oyttpy_GN2IqzzpCzi5ICGxvRDMa9tDCRS9YUDh7i0uXj3Z3QcWVjwtqjBi3AUTCcKQ8xgCJ-jqwdu1IzsM5-g4reu1EMPs_la_6cib5VhvEdacVY9WkXCt8CRyO9NlJvo9ukZ8AnDoRFaSolN5MUwtvcwtT2kBgNtNA.SRxE4R_Kq5rfoULS_mUiDZ6w_SLQvnt3_1enda4PmX8"
+        "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.7G9HG1GwRUhorxV4vbMprdjMAjgbFKah6i2Wp4TyHrXnCuxt4h4U9IxYZ4rSpIeOoi8P_DZIHdvn_Jnjw2YPXzW6tU9A94HM.7YDBx9MTjWR5nqMQY1flmw.qIIhFlYS_NvEOAB1VLzIGMWF8d2kkEevYEJxtwQyzexHkVzRYAqFwQWXMAmE5DfOhXhw-6i0pF8AZV7LmsdooRicqEdRyi4V-5FE7nDPwsZ2JwgDlJQiBkRUj7wDi7bOEq0XLBumXh2GHlmVlGspOEXGCuTxXZPNlOqi-dkDfXp_mEV_VP_V42eErWdWw3zg1WWkov31DFTx5V7Jg78q7t9iV3AaMbYIKZyANgbFitF7cLwOq57quOunoAexSWcVPH9cHLoTINW5fyruuC_SAcbrnoLo56J_ZVcLuLewO4eWncL6mLaWLwEVfoDOil4pOg3gF2Y9EYgw2VR_2YcYpw.MJG5eYDwKQgzErXhN7pWwl1_oYnaaUcXNrd2dDu9I7w"
     }
 
     GetDataUrl = "https://space-fleet.galooli.com/_Base/ReportGetPageAny?reportUID="
@@ -101,9 +108,25 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
     headers = {
         "Custom-Header": "SomeValue"
     }
-
+    
+    reportDefJSON = {"ReportName":"Generator+Performance:+01/10/2023+13:39:38","ReportTypeCode":18,"Fields":[{"FieldDisplayOptions":{"DisplayName":"Unit+Id","ColumnDisplayName":"Unit+Id","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"unit_id"},{"FieldDisplayOptions":{"DisplayName":"Unit+Name","ColumnDisplayName":"Unit+Name","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"unit_name"},{"FieldDisplayOptions":{"DisplayName":"Group+Name","ColumnDisplayName":"Group+Name","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"group_name"},{"FieldDisplayOptions":{"DisplayName":"Cluster+Name","ColumnDisplayName":"Cluster+Name","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"fleet_name"},{"FieldDisplayOptions":{"DisplayName":"Site+Layout","ColumnDisplayName":"Site+Layout","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"unit_layout_code"},{"FieldDisplayOptions":{"DisplayName":"Start+date","ColumnDisplayName":"Start+date","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"sumcalc_StartDate"},{"FieldDisplayOptions":{"DisplayName":"Duration+(Days)","ColumnDisplayName":"Duration+(Days)","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"sumcalc_TotalDays"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+1+Operational+Fuel+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG1OperationalConsump"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+2+Operational+Fuel+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG2OperationalConsump"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+2+Overall+Fuel+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG2TotalConsump"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+1+Overall+Fuel+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG1TotalConsump"},{"FieldDisplayOptions":{"DisplayName":"DG1+Total+Engine+Hours","ColumnDisplayName":"DG1+Total+Engine+Hours","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG1TotalEngine"},{"FieldDisplayOptions":{"DisplayName":"DG2+Total+Engine+Hours","ColumnDisplayName":"DG2+Total+Engine+Hours","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG2TotalEngine"},{"FieldDisplayOptions":{"DisplayName":"Generator.Generator1.KVA","ColumnDisplayName":"Generator.Generator1.KVA","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"additional_info.KVA_Gen1"},{"FieldDisplayOptions":{"DisplayName":"Generator.Generator2.KVA","ColumnDisplayName":"Generator.Generator2.KVA","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"additional_info.KVA_Gen2"},{"FieldDisplayOptions":{"DisplayName":"DG1+-+Load+Power+Avg+[KW]","ColumnDisplayName":"DG1+-+Load+Power+Avg+[KW]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"energy_DG1avgLoad"},{"FieldDisplayOptions":{"DisplayName":"DG1+-+Load+Power+Max+[KW]","ColumnDisplayName":"DG1+-+Load+Power+Max+[KW]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"energy_DG1maxLoad"},{"FieldDisplayOptions":{"DisplayName":"DG2+-+Load+Power+Avg+[KW]","ColumnDisplayName":"DG2+-+Load+Power+Avg+[KW]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"energy_DG2avgLoad"},{"FieldDisplayOptions":{"DisplayName":"DG2+-+Load+Power+Max+[KW]","ColumnDisplayName":"DG2+-+Load+Power+Max+[KW]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"energy_DG2maxLoad"},{"FieldDisplayOptions":{"DisplayName":"Generator+1+-+Total+Energy+[KWH]","ColumnDisplayName":"Generator+1+-+Total+Energy+[KWH]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"energy_generator1TotalEnergyKWH"},{"FieldDisplayOptions":{"DisplayName":"Generator+2+-+Total+Energy+[KWH]","ColumnDisplayName":"Generator+2+-+Total+Energy+[KWH]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"energy_generator2TotalEnergyKWH"},{"FieldDisplayOptions":{"DisplayName":"Consumed","ColumnDisplayName":"Consumed","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"generators_DG1OperationalConsump+generators_DG2OperationalConsump","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_1"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+1+Total+Fuel+Drop+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG1TotalFuelDrop"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+2+Total+Fuel+Drop+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG2TotalFuelDrop"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+1+Total+Refueled+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG1TotalRefueled"},{"FieldDisplayOptions":{"DisplayName":"","ColumnDisplayName":"Generator+2+Total+Refueled+[Liter]","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG2TotalRefueled"},{"FieldDisplayOptions":{"DisplayName":"Drop","ColumnDisplayName":"Drop","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"generators_DG1TotalFuelDrop+generators_DG2TotalFuelDrop","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_2"},{"FieldDisplayOptions":{"DisplayName":"Refueled","ColumnDisplayName":"Refueled","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"generators_DG1TotalRefueled+generators_DG2TotalRefueled","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_3"},{"FieldDisplayOptions":{"DisplayName":"Liter/Gallon+per+kWh","ColumnDisplayName":"Liter/Gallon+per+kWh","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"(generators_DG1OperationalConsump+generators_DG2OperationalConsump)/(energy_generator1TotalEnergyKWH+energy_generator2TotalEnergyKWH)","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_4"},{"FieldDisplayOptions":{"DisplayName":"Liter/Gallon+per+Hour","ColumnDisplayName":"Liter/Gallon+per+Hour","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"generators_DG1loadBasedFuelConsumption"},{"FieldDisplayOptions":{"DisplayName":"Avg.+Engine+Hours","ColumnDisplayName":"Avg.+Engine+Hours","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"generators_DG1TotalEngine+generators_DG2TotalEngine","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_6"},{"FieldDisplayOptions":{"DisplayName":"Average+load+%","ColumnDisplayName":"Average+load+%","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"energy_DG1avgLoad/(additional_info.KVA_Gen1*0.8)","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_7"},{"FieldDisplayOptions":{"DisplayName":"Load+split","ColumnDisplayName":"Load+split","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":True,"CalculationFormulaText":"IF(NUM('energy_DG1avgLoad/(additional_info.KVA_Gen1*0.8)==0');'No+Load+Information'\n;IF(NUM('energy_DG1avgLoad/(additional_info.KVA_Gen1*0.8)>=1');'100%+'\n;IF(NUM('energy_DG1avgLoad/(additional_info.KVA_Gen1*0.8)>=0.8');'80%-100%'\n;IF(NUM('energy_DG1avgLoad/(additional_info.KVA_Gen1*0.8)>=0.6');'60%-80%'\n;IF(NUM('energy_DG1avgLoad/(additional_info.KVA_Gen1*0.8)>=0.3');'30%-60%';'<30%')))))","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_8"},{"FieldDisplayOptions":{"DisplayName":"DG+Panel+1","ColumnDisplayName":"DG+Panel+1","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"Config_Site_Global.Digital_Bead.2160000"},{"FieldDisplayOptions":{"DisplayName":"DG+Running+1","ColumnDisplayName":"DG+Running+1","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"Config_Site_Global.Digital_Bead.2160010"},{"FieldDisplayOptions":{"DisplayName":"Generator+configured","ColumnDisplayName":"Generator+configured","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":True,"CalculationFormulaText":"IF('Config_Site_Global.Digital_Bead.2160000'='Yes';'True';\nIF('Config_Site_Global.Digital_Bead.2160010'='Yes';'True';'False'))","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_9"},{"FieldDisplayOptions":{"DisplayName":"Generator.Maintenance.Cycle+hours+for+periodic+maintenance","ColumnDisplayName":"Generator.Maintenance.Cycle+hours+for+periodic+maintenance","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"additional_info.Cycle_hours_for_periodic_maintenance"},{"FieldDisplayOptions":{"DisplayName":"Generator.Maintenance.Periodic+maintenance+visit+cost","ColumnDisplayName":"Generator.Maintenance.Periodic+maintenance+visit+cost","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"additional_info.Periodic_maintenance_visit_cost"},{"FieldDisplayOptions":{"DisplayName":"Generator.Fuel.Cost+per+Liter/Gallon","ColumnDisplayName":"Generator.Fuel.Cost+per+Liter/Gallon","HiddenInResultsTable":False,"IsCalculatedField":False,"IsTextualCalculatedField":False,"CalculationFormulaText":None,"CalculatedFields":[],"IsActiveCalculatedField":False},"UniqueName":"additional_info.Cost_per_Liter_Gallon"},{"FieldDisplayOptions":{"DisplayName":"Maintenance+cost","ColumnDisplayName":"Maintenance+cost","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"(generators_DG1TotalEngine+generators_DG2TotalEngine)*IF(additional_info.Periodic_maintenance_visit_cost>0;additional_info.Periodic_maintenance_visit_cost;90)/IF(additional_info.Cycle_hours_for_periodic_maintenance>0;additional_info.Cycle_hours_for_periodic_maintenance;250)","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_10"},{"FieldDisplayOptions":{"DisplayName":"Fuel+Cost","ColumnDisplayName":"Fuel+Cost","HiddenInResultsTable":False,"IsCalculatedField":True,"IsTextualCalculatedField":False,"CalculationFormulaText":"(generators_DG1TotalConsump+generators_DG2TotalConsump)*IF(additional_info.Cost_per_Liter_Gallon>0;additional_info.Cost_per_Liter_Gallon;0.78)","CalculatedFields":[],"IsActiveCalculatedField":True},"UniqueName":"calculated_field_11"}],"RequiredFields":[],"Filters":{}}
+    execParamsJSON = {"ZonObjects":"u7214078","PeriodType":0,"StartTime":"2023-10-11+10:26:15","EndTime":"2023-10-18+10:26:15","Language":0,"AdditionalWhere":"","AllowOverridingTimeConstraints":True,"IgnoreStockFleets":True}
     print(date)
     utc_timezone = pytz.timezone('UTC')
+    
+    
+    try:
+        response = requests.post('https://space-galooli.galooli.com/_Base/ReportInitiate',
+                        json = {"reportDefJSON":reportDefJSON,
+                                "execParamsJSON":execParamsJSON},
+                        headers=headers,
+                        cookies=cookies)
+    except Exception as err:
+        print('EEEEEEEEE',err)
+    x = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
+    
+    
+    
 
     #TODO: API only gets 15 min data, so we download 1 minute data 1 week at a time via the website: 
     # # https://unhcr.eyedro.com/#toolsexporter
@@ -124,9 +147,40 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
         print('????????????????????????????????????????????????')
         time.sleep(2)
         response = requests.get(report_url, headers=headers, cookies=cookies)
+
+    # try:
+    #     response = requests.post('https://space-galooli.galooli.com/Dashboard/InitiateDashboard',
+    #                     json = {"myReportId":-10842,"reportDefJSON":x.ReportJSONs.ReportDefJSON,
+    #                             "execParamsJSON":x.ReportJSONs.ExecParamsJSON},
+    #                     headers=headers,
+    #                     cookies=cookies)
+    # except Exception as err:
+    #     print('EEEEEEEEE',err)
+            
     if not '&error=-1' in response.text:
         x = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
-        print(x.NumbersOfPages)
+        
+        print('XXXXXXXXXXXXXX\n',x.ReportJSONs.ExecParamsJSON, '\nYYYYYYYYYY\n\n',x.ReportJSONs.ReportDefJSON, '\nZZZZZZZZZ\n\n')
+        
+    try:
+        response = requests.post('https://space-galooli.galooli.com/Dashboard/InitiateDashboard',
+                        json = {"myReportId":-10842,"reportDefJSON":x.ReportJSONs.ReportDefJSON,
+                                "execParamsJSON":x.ReportJSONs.ExecParamsJSON},
+                        headers=headers,
+                        cookies=cookies)
+    except Exception as err:
+        print('EEEEEEEEE',err)
+        
+        
+        # try:
+        #     response = requests.post('https://space-galooli.galooli.com/_Base/ReportInitiate',
+        #                     json = {"reportDefJSON":x.ReportJSONs.ReportDefJSON,
+        #                             "execParamsJSON":x.ReportJSONs.ExecParamsJSON},
+        #                     headers=headers,
+        #                     cookies=cookies)
+        # except Exception as err:
+        #     print('EEEEEEEEE',err)
+        x = json.loads(response.text, object_hook=lambda d: SimpleNamespace(**d))
         data = [None] * x.NumbersOfPages
 
         for idx in list(range(x.NumbersOfPages)):
@@ -154,7 +208,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
         print('DDDDDDDDD',data)
 
         for val in data:
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', val is None)
+            #print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', val is None)
             if val is None:
                 print('DDDDDDDDD',data)
                 continue
@@ -164,7 +218,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
                 h1 = getattr(z,"ul2.Analog_Bead.1150012")
                 h2 = getattr(z,"ul2.Analog_Bead.1150013")
                 d = getattr(z,"ul2_Record_Time")
-                dt = d[6:10]+'-'+d[3:5]+'-'+d[0:2]+'T'+d[11:17]+'00'
+                dt = d[0:4]+'-'+d[6:8]+'-'+d[10:11]+'T'+d[11:17]+'00'
                 # 15 minute change
                 epoch = ts2Epoch(dt) - 15 * 60
                 utc_datetime = datetime.datetime.utcfromtimestamp(epoch)
@@ -255,7 +309,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
                 lastTs = utc_datetime
                 l1 = ll1
                 l2 = ll2
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            #print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     else:
         print('!!!!!!!!!! Bad Response !!!!!!!!!', response.text)
         return [result, fn, dtStart, liters]
@@ -363,13 +417,183 @@ def archive_data(cursor, conn):
     # ID: unhcrbgl@hotmail.com
     # pw: Unhcrbgl2009@2
 
+def gen_file_from_csv(fn, dtStart, data):
+    start = True
+    key = None ######'CALABAR_BASE_TANK_'
+    liters = []
+    t_delta_minute = datetime.timedelta(minutes=1)
+    l1=l2=hr1=hr2=dl1=dl2 = 0
+    #ttl1=ttl2=0
+    tzz = pytz.timezone(tz)
+    #print('DDDDDDDDD',data)
+    xxx = -1
+    if os.path.exists(fn):
+        with open(fn, 'r') as file:
+            # Read the lines from the file and remove newline characters
+            lines = [line.strip() for line in file.readlines()]
+        return [-1, fn, dtStart, lines]
+
+    for val in data:
+        xxx += 1
+        #print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', val is None)
+        if val is None:
+            #print('DDDDDDDDD',data)
+            continue
+        if val.startswith('Unit'):
+            continue
+
+        val = val.replace('"','')
+        z = val.split(',')
+        if key is None:
+            key = z[0]
+        ll1 = decimal.Decimal(z[2])
+        ll2 = decimal.Decimal(z[3])
+        h1 = decimal.Decimal(z[4])
+        h2 = decimal.Decimal(z[5])
+        d = z[1]
+        dt = d[0:4]+'-'+d[5:7]+'-'+d[8:10]+'T'+d[11:16]+':00'
+        # 15 minute change
+        epoch = ts2Epoch(dt) - 15 * 60
+        utc_datetime = datetime.datetime.utcfromtimestamp(epoch)
+        # Set the timezone to UTC
+        ###utc_datetime = datetime_obj.astimezone(tzz)#utc_timezone)
+        # Print the datetime object in a specific format
+        formatted_datetime = utc_datetime.strftime('%Y-%m-%dT%H:%M:%S')+':00'
+        formatted_datetime_end = (utc_datetime + datetime.timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%S')+':00'
+        #print('AAAAAAA',dt, epoch, datetime_obj.strftime('%Y-%m-%d %H:%M'),formatted_datetime)
+        #exit()
+
+        if start:
+            start = False
+            print('@@@@@@',z,'@@@@@@')
+            l1 = ll1
+            l2 = ll2
+            dl1 = ll1
+            dl2 = ll2
+            hr1 = h1
+            hr2 = h2
+            lastTs = utc_datetime - t_delta_minute
+        # else:
+            # idx = find_index_of_element_in_list_of_lists(meterDataWh,int(epoch))
+            # if idx != -1:
+            #     print('MMMMMMMMMMMMMMM',meterDataWh[idx])
+            #     #print(liters)
+            #     print("Formatted datetime:", formatted_datetime)
+
+            #     liters.append({"start":formatted_datetime, "wh": meterDataWh[idx][1],"l1":ll1, "l2":ll2, "dl1": -ttl1, "dl2": -ttl2,
+            #     ####liters.append({"start":formatted_datetime, "wh": meterDataWh[idx][1],"l1":ll1, "l2":ll2, "dl1": ll1-dl1, "dl2": ll2-dl2, 
+            #                 "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2})
+            #     dl1 = ll1
+            #     dl2 = ll2
+            #     ttl1 = 0
+            #     ttl2 = 0
+            #     continue
+
+        if len(liters) % 30 == 0:
+            print('x', len(liters))
+        tdelta = utc_datetime - lastTs
+        ####print('TTTTTTT',tdelta, tdelta == t_delta_minute, tdelta  < datetime.timedelta(minutes=2) )
+        if l1-ll1 < 0:
+            l1=ll1
+        if l2-ll2 < 0:
+            l2=ll2
+        epoch = str(epoch).split('.')[0]
+        if tdelta == t_delta_minute:
+            lastData = {"key":key+epoch,"start":formatted_datetime, "end":formatted_datetime_end, "epoch": epoch,"l1":ll1, "l2":ll2, "dl1": l1-ll1, "dl2": l2-ll2,
+                            "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2}
+            liters.append(lastData)
+        # elif (tdelta  == datetime.timedelta(minutes=2)):
+        #     missingTs = utc_datetime - t_delta_minute
+        #     missingEpoch = str(int(epoch) + 60).split('.')[0]
+        #     formatted_missingTs = missingTs.strftime('%Y-%m-%d %H:%M')+':00'
+        #     missingEpoch = str(ts2Epoch(missingTs.strftime('%Y-%m-%dT%H:%M')+':00') - 15 * 60).split('.')[0]
+        #     formatted_missingTs_end = (missingTs + datetime.timedelta(minutes=1)).strftime('%Y-%m-%d %H:%M')+':00'
+        #     liters.append({"key":key+missingEpoch,"start":formatted_missingTs, "end":formatted_missingTs_end, "epoch": missingEpoch,"l1":ll1, "l2":ll2, "dl1": l1-ll1, "dl2": l2-ll2,
+        #                     "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2})
+        #     lastData = {"key":key+missingEpoch,"start":formatted_datetime,  "end":formatted_datetime_end,
+        #                 "epoch": missingEpoch,"l1":ll1, "l2":ll2, "dl1": l1-ll1, "dl2": l2-ll2,
+        #                     "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2}
+        #     liters.append(lastData)
+        elif (tdelta  == datetime.timedelta(minutes=0)): # duplicate timestamp
+            print('DDDDDDDDDDDDDDDD',utc_datetime, epoch)
+
+            continue
+        else: # more than 2 minute gap, use last data with adjusted ts
+            z = 0
+            # lastData = {"start":formatted_datetime, "epoch": epoch,"l1":ll1, "l2":ll2, "dl1": l1-ll1, "dl2": l2-ll2, 
+            #             "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2}
+            # liters.append(lastData)
+            while z < 60:
+                z += 1
+                missingTs = lastTs + t_delta_minute
+                formatted_missingTs = missingTs.strftime('%Y-%m-%dT%H:%M:%S')+':00'
+                formatted_missingTs_end = (missingTs + datetime.timedelta(minutes=1)).strftime('%Y-%m-%dT%H:%M:%S')+':00'
+                
+                missingEpoch = str(int(liters[len(liters)-1]['epoch']) +60).split('.')[0]
+                print('MMMMMMMM',missingEpoch, epoch, int(epoch) - int(missingEpoch), formatted_missingTs, missingTs, lastTs)
+                if int(missingEpoch) <= int(epoch):
+                    lastData = {"key":key+missingEpoch,"start":formatted_missingTs, "end":formatted_missingTs_end, "epoch": missingEpoch,"l1":ll1, "l2":ll2, "dl1": l1-ll1, "dl2": l2-ll2, 
+                                "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2}
+                    liters.append(lastData)
+                    lastTs = missingTs
+                    l1 = ll1
+                    l2 = ll2
+                    continue
+
+                #lastData.update({'ts':formatted_missingTs})
+                #lastData.update({'epoch': missingEpoch})
+                missingData = lastData = {"key":key+missingEpoch,"start":formatted_missingTs, "end":formatted_missingTs_end, "epoch": missingEpoch,"l1":ll1, "l2":ll2, "dl1": l1-ll1, "dl2": l2-ll2, 
+                            "hr1": h1, "hr2": h2, "dhr1": hr1-h1,  "dhr2": hr2-h2}
+                print('LLLLL', missingData)
+                #liters.append(missingData)
+                lastTs = missingTs
+                lastData = missingData
+                break
+        lastTs = utc_datetime
+        l1 = ll1
+        l2 = ll2
+        #print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+    if len(liters) == 0:
+        return [0, fn, dtStart, liters]
+    print(len(liters),'############',liters[0])
+    print(len(liters),'############',liters[10])
+    print(len(liters),'############',liters[385])
+    print(len(liters),'############',liters[386])
+    print('fn',fn)
+
+
+    with open(fn, 'w', newline='') as f:
+        writer = csv.writer(f)
+        # write header
+        # if bulk:
+        #     writer.writerow(["key", "start", "end", "epoch", "tankl1"])
+        #     for x in liters:
+        #         data = [x["key"], x["start"],x["end"],x['epoch'],x["l1"]]
+        #         writer.writerow(data)
+        # else:
+        writer.writerow(["key", "start", "end", "epoch", "tankl1", "tankl2", "deltal1", "deltal2", "hrs1", "hrs2", "deltahrs1", "deltahrs2"])
+        for x in liters:
+            data = [x["key"], x["start"],x["end"],x['epoch'],x["l1"], x["l2"], x["dl1"], x["dl2"], x["hr1"], x["hr2"], x["dhr1"], x["dhr2"]]
+            writer.writerow(data)
+    with open(fn, 'r') as file:
+        # Read the lines from the file and remove newline characters
+        lines = [line.strip() for line in file.readlines()]
+    return [-1, fn, dtStart, lines]
+
+
 fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,deltahrs1,deltahrs2'
 # example with multiple GBs
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
-    
     #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    
+    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BASE_TANK_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
+    # {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    #{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -384,23 +608,22 @@ report_data = [
 # set these before calling getData()
 year = 2023
 month = 10
-day = 3
+day = 10
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 7
+days = 22
 
 cnt_processed = 0
 site_idx = 0
 
 # set to 1 to just do the first site in the report_data list
-end_idx = len(report_data)
+end_idx = 1 #####len(report_data)
+cursor, conn = create_mysql_connection()              ##############None, None 
 
-cursor, conn = create_mysql_connection()
-
-res = archive_data(cursor, conn)
-if res != True:
-    exit()
+# res = archive_data(cursor, conn)
+# if res != True:
+#     exit()
 
 while site_idx < end_idx:
     meters =  report_data[site_idx]['meters']
@@ -428,7 +651,7 @@ while site_idx < end_idx:
         res = getData(report_data[site_idx], date, tz, offset_hrs)
         cnt_processed += res[0]
         fn = res[1]
-        dtStart = res[2]
+        dtStart = res[2][0:10] + '_'
         liters = res[3]
         #####print('LLLLLLLLLLLLLLLL',liters)
         if len(liters) == 0:
@@ -462,7 +685,7 @@ while site_idx < end_idx:
             date += datetime.timedelta(days=1)
             continue
 
-        fn = fn.replace('/galooli/', '/combined/').replace('_liters_', '%s_' % meter_ids).replace('.csv','combined.csv')
+        fn = fn.replace('/galooli/', '/combined/'+ date.isoformat()[0:10]+ '_').replace('_liters_', '%s_' % meter_ids).replace('.csv','_combined.csv')
         ######################## insert to regenerate combined file
         # if os.path.exists(fn):
         #     os.remove(fn)
@@ -492,7 +715,7 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
                     for l in f.readlines():
                         data_list = l.split(',')
                         #print(list[12][:-1],list)
-                        key = data_list[0] + '_' +meter_ids
+                        key = data_list[0]
                         values = [data_list[1], data_list[2], data_list[4], data_list[5],data_list[6],data_list[7],key,None,None,None,None,None,None]
                         
                         x = 7
@@ -565,12 +788,14 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
                     # if wh < 100:
                     #     dl1_sum = 0
                     #     dl2_sum = 0
+                 
                     fuel[dl1_idx] = str(dl1_sum)[:4]
                     fuel[dl2_idx] = str(dl2_sum)[:4]
                     dt = datetime.datetime.utcfromtimestamp(fuel_epoch)
                     fuel[1] = dt.isoformat().replace('T', ' ')
                     fuel[2] = (dt + datetime.timedelta(minutes=15)).isoformat().replace('T', ' ')
                     fuel[3] = str(fuel_epoch)
+                    fuel[0] = report_data[site_idx]["key"] + fuel[3] + meter_ids
                     fuel_str = ','.join(fuel)
                     #print('FFF',fuel_str)
                     for k in list(range(0,len(kwh))):
@@ -633,7 +858,7 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
             
             
         loop -= 1
-        date += datetime.timedelta(days=1)
+        date += datetime.timedelta(days=1)        
         #######################################
     site_idx += 1
     loop = days
