@@ -94,7 +94,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
     # pw: Unhcr.007
     
     # ID: unhcrbgl@hotmail.com
-    # pw: Unhcrbgl2009@2
+    # pw: Unhcrbgl2009@3
     # Define cookies  --- login on browser  and get "Token" cookie https://space-fleet.galooli.com
     cookies = {
         "Token": "hub_eyJhbGciOiJBMjU2S1ciLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.7G9HG1GwRUhorxV4vbMprdjMAjgbFKah6i2Wp4TyHrXnCuxt4h4U9IxYZ4rSpIeOoi8P_DZIHdvn_Jnjw2YPXzW6tU9A94HM.7YDBx9MTjWR5nqMQY1flmw.qIIhFlYS_NvEOAB1VLzIGMWF8d2kkEevYEJxtwQyzexHkVzRYAqFwQWXMAmE5DfOhXhw-6i0pF8AZV7LmsdooRicqEdRyi4V-5FE7nDPwsZ2JwgDlJQiBkRUj7wDi7bOEq0XLBumXh2GHlmVlGspOEXGCuTxXZPNlOqi-dkDfXp_mEV_VP_V42eErWdWw3zg1WWkov31DFTx5V7Jg78q7t9iV3AaMbYIKZyANgbFitF7cLwOq57quOunoAexSWcVPH9cHLoTINW5fyruuC_SAcbrnoLo56J_ZVcLuLewO4eWncL6mLaWLwEVfoDOil4pOg3gF2Y9EYgw2VR_2YcYpw.MJG5eYDwKQgzErXhN7pWwl1_oYnaaUcXNrd2dDu9I7w"
@@ -586,13 +586,13 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
     #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
+    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
     #{"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -603,16 +603,16 @@ report_data = [
     {"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 ]
- # pw: Unhcrbgl2009@2
+ # pw: Unhcrbgl2009@3
 
 # set these before calling getData()
 year = 2023
-month = 10
-day = 30
+month = 11
+day = 7
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 9
+days = 7
 
 cnt_processed = 0
 site_idx = 0
@@ -621,10 +621,10 @@ site_idx = 0
 end_idx = 1 #####len(report_data)
 cursor, conn = create_mysql_connection()              ##############None, None 
 
-res = archive_data(cursor, conn)
-if res != True:
-    exit()
-exit()
+# res = archive_data(cursor, conn)
+# if res != True:
+#     exit()
+# exit()
 
 while site_idx < end_idx:
     meters =  report_data[site_idx]['meters']
