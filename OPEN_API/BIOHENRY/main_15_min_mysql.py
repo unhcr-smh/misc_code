@@ -21,7 +21,6 @@ MYSQL = {
 
 def db_sql(cursor, conn, sql, vals):
     try:
-        #cursor = create_m, valsysql_connection()
         cursor.execute(sql, vals)
         conn.commit()
     except Exception as e:
@@ -30,7 +29,6 @@ def db_sql(cursor, conn, sql, vals):
 
 def db_select_sql(cursor, sql):
     try:
-        #cursor = create_m, valsysql_connection()
         cursor.execute(sql)
         result = cursor.fetchall()
         print('RRRRRRR',result)
@@ -41,20 +39,16 @@ def db_select_sql(cursor, sql):
 
 
 def create_mysql_connection():
-    ############return None, None
+    #return None, None   # for no mysql queries
     print('Connecting to %s' % MYSQL.values())
     try:
         db_connection= MySQLdb.connect(**MYSQL)
-        #("localhost","unhcr","unhcr","unhcr")
-    # If connection is not successful
     except Exception as e:
         print("Can't connect to database",e)
         return 0
     # If Connection Is Successful
     print("Connected")
     cursor = db_connection.cursor()
-    #conn = MySQLdb.connect(**MYSQL)
-    #cursor = conn.cursor()
     return cursor, db_connection
 
 def getData(report_data, date, tz, offset_hrs, bulk = False):
@@ -66,8 +60,6 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
 
     report_url = report_data["url"] % (dtStart, dtEnd)
     key = report_data["key"]
-    ###########fn = 'OPEN_API/BIOHENRY/data/galooli/%s_%s_liters_%s.csv' % (date.isoformat()[0:10], report_data["site"], key)
-    #OPEN_API\BIOHENRY\data\galooli\CALABAR_BASE_TANK_.csv
     fn = 'OPEN_API/BIOHENRY/data/galooli/%sBASE_TANK_NEW.csv' % report_data["key"]
     if bulk == True:
         fn = fn.replace('_liters_','_bulk_')
@@ -79,17 +71,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
         return  gen_file_from_csv(fn.replace('TANK','TANK_CSV'), dtStart, liters)  ##[-1, fn, dtStart, liters]
     print( report_url, report_data["key"])
 
-    # my local PG connection, not being used right now --- we are using CSV files for RetScreen
-    # engine = create_engine('postgresql://unhcr:unhcr@localhost:5432/eyedro_meters')
-    # con = psycopg2.connect(database="eyedro_meters", user="unhcr", password="unhcr", host="localhost", port="5432")
-    # print('SQL Connection String Created')
-
-    #Nigeria - SO Ogoja 009-80AA3 --- guest house
-    #Nigeria - SO Ogoja 009-80AA5 --- office --- no data 3-8 to 3-13 2023 --- we need full days
-
-    # table_names = ['00980AA5']
     # https://login.galooli.com
-    
     # ID: hermes@unhcr.org
     # pw: Unhcr.007
     
@@ -586,13 +568,13 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
     #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
+    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
     #{"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -608,11 +590,11 @@ report_data = [
 # set these before calling getData()
 year = 2023
 month = 11
-day = 14
+day = 26
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 6
+days = 10
 
 cnt_processed = 0
 site_idx = 0
@@ -793,8 +775,8 @@ WHERE TABLE_SCHEMA = "unhcr_fuel" AND TABLE_NAME = "unhcr_fuel_kwh";'''
                     fuel[dl1_idx] = str(dl1_sum)[:4]
                     fuel[dl2_idx] = str(dl2_sum)[:4]
                     dt = datetime.datetime.utcfromtimestamp(fuel_epoch)
-                    fuel[1] = dt.isoformat().replace('T', ' ')
-                    fuel[2] = (dt + datetime.timedelta(minutes=15)).isoformat().replace('T', ' ')
+                    fuel[1] = (dt - datetime.timedelta(minutes=60)).isoformat().replace('T', ' ')
+                    fuel[2] = (dt - datetime.timedelta(minutes=45)).isoformat().replace('T', ' ')
                     fuel[3] = str(fuel_epoch)
                     fuel[0] = report_data[site_idx]["key"] + fuel[3] + meter_ids
                     fuel_str = ','.join(fuel)
