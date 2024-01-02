@@ -60,7 +60,7 @@ def getData(report_data, date, tz, offset_hrs, bulk = False):
 
     report_url = report_data["url"] % (dtStart, dtEnd)
     key = report_data["key"]
-    fn = 'OPEN_API/BIOHENRY/data/galooli/%sBASE_TANK_NEW.csv' % report_data["key"]
+    fn = 'NIGERIA_FUEL_BIOHENRY/data/galooli/%sBASE_TANK_NEW.csv' % report_data["key"]
     if bulk == True:
         fn = fn.replace('_liters_','_bulk_')
     if os.path.exists(fn):
@@ -573,8 +573,8 @@ report_data = [
     #{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -588,13 +588,13 @@ report_data = [
  # pw: Unhcrbgl2009@3
 
 # set these before calling getData()
-year = 2023
-month = 12
-day = 18
+year = 2024
+month = 1
+day = 1
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 2
+days = 1
 
 cnt_processed = 0
 site_idx = 0
@@ -863,9 +863,9 @@ while ddd < 31:
     ddd += 1
 
     # Open the input file for reading
-    input_file_path = './OPEN_API/BIOHENRY/data/eyedro/one-minute-data_Nigeria-SO-Ogoja-Office_8-22_9-02-2023.csv'
-    galooli_file_path = './OPEN_API/BIOHENRY/data/galooli/liters_2023-08-%s.csv' % ('0%s' % ddd)[-2:]
-    output_file_path = './OPEN_API/BIOHENRY/data/output4.csv'
+    input_file_path = './NIGERIA_FUEL_BIOHENRY/data/eyedro/one-minute-data_Nigeria-SO-Ogoja-Office_8-22_9-02-2023.csv'
+    galooli_file_path = './NIGERIA_FUEL_BIOHENRY/data/galooli/liters_2023-08-%s.csv' % ('0%s' % ddd)[-2:]
+    output_file_path = './NIGERIA_FUEL_BIOHENRY/data/output4.csv'
 
     print(galooli_file_path)
 
