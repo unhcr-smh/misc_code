@@ -7,6 +7,32 @@ print('Libraries imported')
 
 #######ENGINE = create_engine('postgresql://postgres:4raxeGo5xgB$@localhost:5432/eyedro_meters')
 ENGINE = create_engine('mysql://lor__eor:lor__eor@db4free.net/eyedro_meters') # connect to server
+# table DDL -- should have matching entry in generator_info.xlsx file
+
+# -- eyedro_meters.`009-XXXXX` definition
+
+# CREATE TABLE `009-XXXXX` (
+#   `index` int DEFAULT NULL,
+#   `DeviceSerial` int DEFAULT NULL,
+#   `Timestamp` int NOT NULL,
+#   `Wh` int DEFAULT NULL,
+#   `kWH` double DEFAULT NULL,
+#   `KW` double DEFAULT NULL,
+#   `gmt_timestamp` varchar(50) DEFAULT NULL,
+#   `month` int DEFAULT NULL,
+#   `week` int DEFAULT NULL,
+#   `day_of_month` int DEFAULT NULL,
+#   `day_of_week` varchar(50) DEFAULT NULL,
+#   `time` varchar(50) DEFAULT NULL,
+#   `timeslot_mean` double DEFAULT NULL,
+#   `timeslot_median` double DEFAULT NULL,
+#   `Wh_Outlier` tinyint(1) DEFAULT NULL,
+#   `KVA Rating` double DEFAULT NULL,
+#   `EOR` double DEFAULT NULL,
+#   `LOR` double DEFAULT NULL,
+#   PRIMARY KEY (`Timestamp`),
+#   KEY `LOR_IDX` (`LOR`) USING BTREE
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 print('SQL Connection String Created')
 
@@ -32,25 +58,28 @@ def calc_eor(kva,pf,load,kw):
 
 print('Function created: calc_eor')
 
+# ((60 * PF)* MIN_FIXED_LOAD_FACTOR)/kw
 def calc_lor(kva,pf,load,kw):
-    if kva*pf <= MIN_FIXED_LOAD_FACTOR:
-        lor = ((kva*pf*load)-kw)/kw
-        return ((kva*pf*load)-kw)/kw
-    else:
-        pass
+    #if kva*pf <= MIN_FIXED_LOAD_FACTOR:
+    lor = (kva*pf*MIN_FIXED_LOAD_FACTOR)/kw
+    return lor
+    #return ((kva*pf*load)-kw)/kw
+    #else:
+    #    pass
 
 print('Function created: calc_lor')
 
 meter_serials = df_gen_info['DeviceSerial_NoDash'].to_list()
 print('XXXXXXXXX',meter_serials)
-for serial in    ['00980845']: ###smh meter_serials:
+for serial in    ['009-80E2A']: ###smh meter_serials:
     
     rt_st = dt.now()
     
     try:
+
         # Call PG database to pull in meter readings for a sample 
         print('AAAAAAAA')
-        df_meter_readings = pd.read_sql_query(f'select * from `{serial}` WHERE EOR is null limit 10000',con=ENGINE)
+        df_meter_readings = pd.read_sql_query(f'select * from `{serial}` WHERE LOR is null limit 10000',con=ENGINE)
         print("df_meter_readings",serial)
         #### continue
 
