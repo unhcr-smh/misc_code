@@ -69,17 +69,18 @@ def calc_lor(kva,pf,load,kw):
 
 print('Function created: calc_lor')
 
-meter_serials = df_gen_info['DeviceSerial_NoDash'].to_list()
+meter_serials = df_gen_info[['Meter Serial No.', 'KVA Rating']].values.tolist()
 print('XXXXXXXXX',meter_serials)
-for serial in    ['009-80E2A']: ###smh meter_serials:
+for serial in    meter_serials:
+    if serial[0] != '009-80B1E': continue
     
     rt_st = dt.now()
     
     try:
 
         # Call PG database to pull in meter readings for a sample 
-        print('AAAAAAAA')
-        df_meter_readings = pd.read_sql_query(f'select * from `{serial}` WHERE LOR is null limit 10000',con=ENGINE)
+        print('AAAAAAAA', serial)
+        df_meter_readings = pd.read_sql_query(f'select * from `{serial[0]}` WHERE LOR is null limit 10000',con=ENGINE)
         print("df_meter_readings",serial)
         #### continue
 
@@ -153,7 +154,7 @@ for serial in    ['009-80E2A']: ###smh meter_serials:
         for z in x:
             if z[-1] is None: z[-1] = 'null'
             print('XXXXXXXX\n',z[-3:])
-            sql += 'UPDATE `%s` SET EOR = %s, LOR = %s WHERE `Timestamp` = %s;' %(serial,z[-2],z[-1],z[2])
+            sql += 'UPDATE `%s` SET EOR = %s, LOR = %s WHERE `Timestamp` = %s;' %(serial[0],z[-2],z[-1],z[2])
             cnt += 1
             executed = False
             if cnt % 500 == 0: 
@@ -165,7 +166,7 @@ for serial in    ['009-80E2A']: ###smh meter_serials:
         if not executed: res = conn.execute(text(sql))
         print('33333',res)
         print(conn.commit())
-        df_meter_readings.to_csv(f'LOR-EOR/results/{serial}.csv')
+        df_meter_readings.to_csv(f'LOR-EOR/results/{serial[0]}.csv')
     
         # Print status message
         rt_et = dt.now()
