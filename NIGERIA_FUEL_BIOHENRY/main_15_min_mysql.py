@@ -590,11 +590,11 @@ report_data = [
 # set these before calling getData()
 year = 2024
 month = 1
-day = 1
+day = 8
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 9
+days = 11
 
 cnt_processed = 0
 site_idx = 0
