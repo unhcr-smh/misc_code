@@ -11,6 +11,14 @@ import MySQLdb
 import datetime
 import pytz
 import os, sys, traceback
+import shutil
+import argparse
+
+# Create a parser object
+parser = argparse.ArgumentParser(description='A simple calculator.')
+
+# Add arguments to the parser
+parser.add_argument('x', type=float, help='The first number')
 
 MYSQL = {
     'db': 'unhcr_fuel',
@@ -371,9 +379,20 @@ def meter_response(serial, timestamp):
     print('!!!!!!!!!!!!!!!!!',response)
     return json.loads(response.text)
 
+def archive_folders(source_folder, destination_folder, match):
+
+    files = os.listdir(source_folder) # get the list of files in the source folder
+
+    for file in files: # loop through the files
+        if file.endswith(match): # check if the file name starts with 'pws'
+            shutil.move(os.path.join(source_folder, file), os.path.join(destination_folder, file)) # move the file to the destination folder
+            print('moving %s' %file)
+        
+    
+    
 def archive_data(cursor, conn):
     #### archive data
-    dt = datetime.date.today()  - datetime.timedelta(days=30)
+    dt = datetime.date.today()  - datetime.timedelta(days=90)
     sql = "REPLACE INTO unhcr_fuel.unhcr_fuel_gb_kwh_archive SELECT * FROM unhcr_fuel.unhcr_fuel_gb_kwh WHERE start < '%s'" % dt
     try:
         cursor.execute(sql)
@@ -568,13 +587,13 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 report_data = [
     #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
+    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
     #{"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -589,24 +608,48 @@ report_data = [
 
 # set these before calling getData()
 year = 2024
-month = 1
-day = 29
+month = 2
+day = 5
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 8
+days = 9
 
 cnt_processed = 0
 site_idx = 0
+
+# Create a parser object
+parser = argparse.ArgumentParser(description='To archive or not.')
+
+# Add arguments to the parser
+parser.add_argument('archive', help='archive_files or archive_data')
+
+args = parser.parse_args()
+print('AAAAAAAA', args)
+
+if args.archive == 'archive_files':
+    source_folder = 'NIGERIA_FUEL_BIOHENRY\\data\\galooli'
+    destination_folder = 'NIGERIA_FUEL_BIOHENRY\\data\\archive\\galooli'
+    match = 'CSV_NEW.csv'
+    archive_folders(source_folder, destination_folder, match)
+
+    source_folder = 'NIGERIA_FUEL_BIOHENRY\\data\\combined'
+    destination_folder = 'NIGERIA_FUEL_BIOHENRY\\data\\archive\\combined'
+    match = '.csv'
+    archive_folders(source_folder, destination_folder, match)
+    exit()
+
 
 # set to 1 to just do the first site in the report_data list
 end_idx = 1 #####len(report_data)
 cursor, conn = create_mysql_connection()              ##############None, None 
 
-# res = archive_data(cursor, conn)
-# if res != True:
-#     exit()
-# exit()
+if args.archive == 'archive_data':
+    res = archive_data(cursor, conn)
+    if res != True:
+        exit(99)
+    exit()
+
 
 while site_idx < end_idx:
     meters =  report_data[site_idx]['meters']

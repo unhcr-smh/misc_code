@@ -99,15 +99,15 @@ print('XXXXXXXXX',meter_serials)
 rt_st = dt.now()
 ###meter_serials = meter_serials[-3:]
 for serial in    meter_serials:
-    #####if serial[0] != '009-80E29': continue
-    if serial[0] in ['009-80B76']: continue  # can not handle site with 2 generators yet
+    if serial[0] in ['009-80B76']: continue
+    #if serial[0] not in ['009-80A9E']: continue  # can not handle site with 2 generators yet
     db = serial[0]
     ts = pd.read_sql_query(f'select max(`Timestamp`) from `{serial[0]}`',con=ENGINE).values[0][0]
 
     # This is the first valid data for 009-80E29
     # TODO we need a way to determine this for a particular GB
     print(ts)
-    if ts is None: ts = 1699833600
+    if ts is None: ts = 1682942400
 
     done = 0
     kwh = []
