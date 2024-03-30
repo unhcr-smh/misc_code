@@ -397,7 +397,30 @@ def find_index_of_element_in_list_of_lists(list_of_lists, target_element):
 '''
 This function takes as its input a meter serial number and an epoch timestamp and calls the GetData API to retrieve
 the prior day's readings (96 steps at 15-minute intervals). It returns the response as JSON text
+
+Python example:
+Parameters: serial: string, greenbox serial number, example:  '00980AA1' 
+            timestamp: number, Unix epoch, must be on 15 minute boundary, example: 1710720000
+
+# get a day of 15 minute data (actually 96 15 minute intervals)
+def meter_response(serial, timestamp):
+    USER_KEY_GET_DATA = "UNHCRp28DnAV8s6uHdMHiYgba95RcRv4DnfeuPmP"
+    print('EyeDro Endpoint and Key Set', serial, timestamp)
+    # Set URL with serial and timestamp,
+    meter_url = "https://api.eyedro.com/customcmd?Cmd=Unhcr.GetData&DeviceSerial=" + str(serial) + "&DateStartSecUtc=" + str(timestamp) + f"&DateNumSteps=96&UserKey={USER_KEY_GET_DATA}"
+    response = requests.get(meter_url, timeout=600)
+    print('!!!!!!!!!!!!!!!!!',response)
+    return json.loads(response.text)
+
+    {"Serial":"00980AA1","Label":"Nigeria - FO Takum","LastCommSecUtc":1710942887}
+    {"Serial":"00980B77","Label":"Nigeria - FO Takum (Office) Gen 2 (B)","LastCommSecUtc":1710942886} 100kVa
+    {"Serial":"00980B7A","Label":"Nigeria - FO Takum (Office) Gen 2","LastCommSecUtc":1710942890}  80kVa
+
+key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,deltahrs1,deltahrs2,GB1_kwh
+key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,deltahrs1,deltahrs2,GB1_kwh,GB2_kwh,GB3_kwh
+
 '''
+
 def meter_response(serial, timestamp):
     ##API_BASE_URL = "https://api.eyedro.com/customcmd"
     ##USER_KEY = "UNHCRMHiYgbHda9cRv4DuPp28DnAnfeV8s6umP5R"
@@ -405,6 +428,8 @@ def meter_response(serial, timestamp):
     print('EyeDro Endpoint and Key Set', serial, timestamp)
     # Set URL with serial and timestamp,
     meter_url = "https://api.eyedro.com/customcmd?Cmd=Unhcr.GetData&DeviceSerial=" + str(serial) + "&DateStartSecUtc=" + str(timestamp) + f"&DateNumSteps=96&UserKey={USER_KEY_GET_DATA}"
+    #get devices
+    #meter_url = 'https://api.eyedro.com/customcmd?Cmd=Unhcr.GetDeviceInventoryList&UserKey=UNHCRMHiYgbHda9cRv4DuPp28DnAnfeV8s6umP5R'
     response = requests.get(meter_url, timeout=600)
     print('!!!!!!!!!!!!!!!!!',response)
     return json.loads(response.text)
@@ -616,9 +641,14 @@ def gen_file_from_csv(fn, dtStart, data):
     return [-1, fn, dtStart, lines]
 
 
+    #{"Serial":"00980AA1","Label":"Nigeria - FO Takum","LastCommSecUtc":1710942887}
+    #{"Serial":"00980B77","Label":"Nigeria - FO Takum (Office) Gen 2 (B)","LastCommSecUtc":1710942886} 100kVa
+    #{"Serial":"00980B7A","Label":"Nigeria - FO Takum (Office) Gen 2","LastCommSecUtc":1710942890}  80kVa
+
 fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,deltahrs1,deltahrs2'
 # example with multiple GBs
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
+takum_gbs = [{"label": "GEN1", "id": "00980B7A"}, {"label": "GEN2", "id": "00980B77"}, {"label": "GRID", "id": "00980AA1"}]
 report_data = [
     #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
@@ -627,7 +657,8 @@ report_data = [
     #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": takum_gbs, "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    ##{"site": "TARABA-OLD", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 
     
     {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
@@ -636,7 +667,7 @@ report_data = [
     {"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     {"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "TARABA", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA-OLD)", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 ]
  # https://login.galooli.com
 # ID: hermes@unhcr.org
@@ -647,12 +678,12 @@ report_data = [
 
 # set these before calling getData()
 year = 2024
-month = 2
-day = 27
+month = 3
+day = 15
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 7
+days = 8
 
 cnt_processed = 0
 site_idx = 0
