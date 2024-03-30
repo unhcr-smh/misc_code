@@ -107,7 +107,7 @@ for serial in    meter_serials:
     # This is the first valid data for 009-80E29
     # TODO we need a way to determine this for a particular GB
     print(ts)
-    if ts is None: ts = 1682942400
+    if ts is None: ts = 1710460800   ####1682942400
 
     done = 0
     kwh = []
