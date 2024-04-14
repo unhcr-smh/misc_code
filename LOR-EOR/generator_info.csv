@@ -1,0 +1,17 @@
+Meter Serial No.,Building Code (UNIFIER),INS Code,Region,Country,Generator Name,KVA Rating,notes
+009-80845,AFGHEROFO01,INS#003,Asia & Pacific,Afghanistan,FO Herat (Genset),150,
+009-80E1F,AFGJALOSO01,INS#004,Asia & Pacific,Afghanistan,SO Jalalabad G66 (Genset),150,
+009-80DCD,AFGJALOSO01,INS#004,Asia & Pacific,Afghanistan,SO Jalalabad G69 (Genset),150,
+009-80E2A,AFGJALOSO01,INS#004,Asia & Pacific,Afghanistan,SO Jalalabad G68 (Genset),150,
+009-80E29,AFGJALOSO01,INS#004,Asia & Pacific,Afghanistan,SO Jalalabad G67 (Genset),150,first good GB data 1699833600
+009-80B76,NGACLBOFO01,INS#396,West & Central Africa,Nigeria,SO Calabar (Genset),60/20,"2 generators on 1 GB, not handled yet"
+009-80B1E,SYRALPOSO01,INS#504,Middle East & North Africa,Syria,SO Aleppo (100 KVA),100,
+009-80B1C,SYRALPOSO01,INS#504,Middle East & North Africa,Syria,SO Aleppo (135 KVA),135,
+009-80B13,SYRALPOSO01,INS#504,Middle East & North Africa,Syria,SO Aleppo (60 KVA),60,
+009-80DD3,,,Middle East & North Africa,Lebanon,SO Tripoli G3,200,
+009-80DD6,,,Middle East & North Africa,Lebanon,SO Tripoli G3,350,
+009-80DDB,,,Middle East & North Africa,Lebanon,SO Tripoli G2,220,
+009-80DD4,,,Middle East & North Africa,Lebanon,SO Tripoli G1,80,
+009-80A9E,,,Middle East & North Africa,Nigeria,Lagos,88,"2 generators on 1 GB, not handled yet -- other is 16kVa (not currently used)"
+009-80B7A,,,West & Central Africa,Nigeria,SO Takum (Genset),80,64
+009-80B77,,,West & Central Africa,Nigeria,SO Takum (Genset),100,80
