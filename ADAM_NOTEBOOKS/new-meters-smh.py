@@ -264,6 +264,8 @@ for serial in SERIALS_TO_CALL:
 
         # Prepare an empty list to hold all rows of the final DataFrame
         all_rows = []
+        for x in li_responses:
+            print(li_responses)
         print('BBBB')
         # Iterate over each response in the list of responses and format into a dataframe
         for data in li_responses:

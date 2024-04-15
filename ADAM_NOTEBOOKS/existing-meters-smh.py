@@ -1,3 +1,4 @@
+import time
 import pandas as pd
 import json as js
 import requests
@@ -9,6 +10,8 @@ print('Libraries Imported')
 # Set Global Variables
 S_IDX = 0
 E_IDX = 100
+TS_DIFF = 1#24 * 60*60  # 1 day
+
 print(f'Starting and ending indices set, processing meters {S_IDX} to {E_IDX -1}')
 
 ### ENGINE = create_engine('postgresql://postgres:4raxeGo5xgB@localhost:5432/eyedro_meters')
@@ -34,10 +37,28 @@ print('EyeDro Endpoint and Key Set')
 # FROM information_schema.tables 
 # WHERE table
 
-L_SQL_SERIALS = pd.read_sql_query("select * from gb_2024.vw_table_list;",con=ENGINE).serial_num.to_list()
+###L_SQL_SERIALS = pd.read_sql_query("select * from gb_2024.vw_table_list;",con=ENGINE).serial_num.to_list()
+L_SQL_SERIALS = set()
+try:
+    L_SQL_SERIALS = set(pd.read_sql_query("SELECT table_name FROM gb_2024.vw_table_list;",con=ENGINE).table_name.values)
+    #s_sql_serials = set(pd.read_sql_query("SELECT table_name FROM gb_2024.vw_table_list;",con=ENGINE).serial_num.to_list())
+except Exception as e:
+    print('EEEEEEEEEEEEEE',e)
+    pass
 print('List of existing meter serials in SQL database gathered')
 
 # Define functions for various operations in the script
+
+def dt2utc(dtt):
+    if dtt.tzinfo is None or dtt.tzinfo.utcoffset(dtt) is None:
+        dtt = dtt.replace(tzinfo=timezone.utc)
+    else:
+        dtt = dtt.astimezone(timezone.utc)
+    return dtt.replace(hour=0, minute=0, second=0, microsecond=0)
+
+# Function to convert Timestamp to epoch time
+def pd_timestamp_to_epoch(timestamp):
+    return timestamp.timestamp()
 
 def eyedro_getdata(serial, timestamp):
     
@@ -139,10 +160,19 @@ def impute_and_summarize(df):
 
 print('function created: impute_and_summarize')
 
-#for serial in L_SQL_SERIALS[S_IDX:E_IDX]:
-for serial in L_SQL_SERIALS:
+#===============================================
+#===============================================
+#===============================================
+idx = len(L_SQL_SERIALS)
+#for serial in L_SQ(L_SERIALS[S_IDX:E_IDX]:
+print('AAAAAAA meters', len(L_SQL_SERIALS))
+perf_st = time.perf_counter()
+for serial in sorted(L_SQL_SERIALS):
     
     rt_st = dt.now()
+    serial_st = time.perf_counter()
+    # if idx < 560:
+    #     break
     
     try:
         # Load the data from the existing table
@@ -160,13 +190,18 @@ for serial in L_SQL_SERIALS:
 
         # Create a list of midnight timestamps between max_timestamp and current_timestamp to pass to the API call
         midnight_timestamps = []
-        current_date = dt.utcfromtimestamp(max_timestamp).date()
-        midnight = dt(current_date.year, current_date.month, current_date.day, 0, 0, 0, tzinfo=timezone.utc)
+        current_date = dt2utc(dt.now()) ###dt.utcfromtimestamp(max_timestamp).date()
+        midnight = current_date ###dt(current_date.year, current_date.month, current_date.day, 0, 0, 0, tzinfo=timezone.utc)
 
         while midnight.timestamp() <= current_timestamp:
             midnight_timestamps.append(int(midnight.timestamp()))
             midnight += timedelta(days=1)
 
+        if current_timestamp - max_timestamp < TS_DIFF:
+            serial_et = time.perf_counter()
+            idx -= 1
+            print(idx, "{:.2f}".format(serial_et - serial_st))
+            continue
         # Create list to hold responses to the API calls, storing each response as an element in a list
         li_responses = []
 
@@ -223,16 +258,24 @@ for serial in L_SQL_SERIALS:
         # Impute means and medians and create imputed value columns for later use
         df_updated = impute_and_summarize(df_updated)
 
+        sql_st = time.perf_counter()
         # Load resulting update to SQL
         df_updated.to_sql(f"{serial}", ENGINE, if_exists='replace')
-        
+        et = time.perf_counter()
         # Print status message
         rt_et = dt.now()
-        print(f"{serial} | {rt_et-rt_st} elapsed | success | Rows Loaded: {len(df_updated)}")
-    
+        sqlet = "{:.2f}".format(et-sql_st)
+        serialet = "{:.2f}".format(et-serial_st)
+        print(f"{serial} | {rt_et-rt_st} elapsed | success | Rows Loaded: {len(df_updated)} cnt: {idx} sql time: {sqlet} serial time: {serialet}")
+        idx-=1
+
     except Exception as e:
         rt_et = dt.now()
-        
+        et = time.perf_counter()
+        sqlet = "{:.2f}".format(et-sql_st)
+        serialet = "{:.2f}".format(et-serial_st)
         # Capture the exception and print the error message
-        print(f"{serial} | {rt_et-rt_st} elapsed | failure | error: {e}")
-    
+        print(f"{serial} | {rt_et-rt_st} elapsed | failure | error: {e}   sql time: {sqlet} serial time: {serialet}")
+
+ttlet = "{:.2f}".format((time.perf_counter() - perf_st)/60)
+print(f"total time | {ttlet} elapsed mins | cnt: {len(L_SQL_SERIALS) - idx} ")
