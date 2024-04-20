@@ -650,24 +650,15 @@ fuel_kwh_header = 'key,start,end,epoch,tankl1,tankl2,deltal1,deltal2,hrs1,hrs2,d
 calabar_gbs = [{"label": "GEN", "id": "00980B76"}, {"label": "GRID", "id": "00980A9C"}]
 takum_gbs = [{"label": "GEN1", "id": "00980B7A"}, {"label": "GEN2", "id": "00980B77"}, {"label": "GRID", "id": "00980AA1"}]
 report_data = [
-    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
-    {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    ####{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BULK_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214078&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    ####{"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/GetReportData?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588&reportType=Favorite_1"},
+    #{"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    #####{"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
     #{"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    #{"site": "TARABA", "meters": takum_gbs, "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    ##{"site": "TARABA-OLD", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-
-    
-    {"site": "ABUJA", "meters": [{"label": "OFFICE", "id": "00980785"}], "key":"ABUJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214084&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "ADIKPO", "meters": [{"label": "OFFICE", "id": "00980AAF"}], "key":"ADIKPO_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214687&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "CALABAR", "meters": calabar_gbs, "key":"CALABAR_BASE_TANK_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214680&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "LAGOS", "meters": [{"label": "OFFICE", "id": "00980A9E"}], "key":"UNHCR_LAGOS_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214694&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "OGOJA", "meters": [{"label": "HOUSE", "id": "00980AA3"}], "key":"OGOJA_GUEST_HOUSE_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214015&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "OGOJA", "meters": [{"label": "OFFICE", "id": "00980AA5"}], "key":"UNHCR_OGOJA_OFFICE_DG1_and_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214695&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
-    {"site": "TARABA-OLD)", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    {"site": "TARABA", "meters": takum_gbs, "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
+    ####{"site": "TARABA-OLD", "meters": [{"label": "OFFICE", "id": "00980AA1"}], "key":"TARABA_DG1_And_DG2_", "url": "https://space-fleet.galooli.com/Fleet/ExecuteFavoriteReport?objId=7214697&objType=u&startTime=%s&endTime=%s&favoriteId=10588"},
 ]
  # https://login.galooli.com
 # ID: hermes@unhcr.org
@@ -679,11 +670,11 @@ report_data = [
 # set these before calling getData()
 year = 2024
 month = 4
-day = 1
+day = 11
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 11
+days = 10
 
 cnt_processed = 0
 site_idx = 0
