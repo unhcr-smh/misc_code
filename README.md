@@ -1,9 +1,6 @@
-
-Python 3.12.3
-
 # misc_code
 
-Various script, mostly relating to data.
+Various Python scripts, mostly relating to data.
 
 The repo is located at:
 https://github.com/unhcr-smh/misc_code
@@ -11,7 +8,7 @@ https://github.com/unhcr-smh/misc_code
 If you need access contact Steve Hermes:
 hermes@unhcr.org    or stevehermes@gmail.com
 
-All the python scripts and notebooks are designed to run from the root of the repository:
+All the python scripts and notebooks are designed to run from the root of the repository using Python 3.12.3:
 
 	git clone https://github.com/unhcr-smh/misc_code.git
 

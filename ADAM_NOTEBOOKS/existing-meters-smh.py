@@ -6,7 +6,7 @@ from datetime import datetime as dt, timedelta, timezone
 print('Libraries Imported')
 
 # Set Global Variables
-TS_DIFF = 24 * 60 * 20  # 1 day
+TS_DIFF = 24 * 60 * 60  # only update if more than 1 day of data missing
 
 # currently not used
 S_IDX = 0
@@ -45,15 +45,6 @@ for serial in sorted(L_SQL_SERIALS):
     #     idx -=1
     #     continue
 
-    # these are bad GBs, can not get data
-    if serial in ['009004E2',
-                  '00980824',
-                  '009004E6',
-                  '00980891',
-                  '00980A03',
-                  '00980A04',
-                  '00980B2E']:
-        continue
 
     rt_st = dt.now()
     serial_st = time.perf_counter()

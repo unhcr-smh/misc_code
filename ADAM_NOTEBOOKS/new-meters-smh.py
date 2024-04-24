@@ -7,7 +7,7 @@ print('Libraries Imported')
 
 try:
     # Get UTC midnight date
-    utc_midnight_date = gb.dt2utc(dt(year=2024, month=4, day=11, hour=0, minute=0, second=0))
+    utc_midnight_date = gb.dt2utc(dt(year=2024, month=4, day=1, hour=0, minute=0, second=0))
 
     ENGINE, schema = gb.create_db_engine(yr=2024)
 

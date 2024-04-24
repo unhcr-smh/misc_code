@@ -244,7 +244,7 @@ def process_new_gb(all_rows, serial, ENGINE):
     df_new_data = df_new_data.sort_values(by=['Timestamp'], ascending=True)
 
     parsed_timestamps = df_new_data['Timestamp'].apply(parse_timestamp)
-    df_new_data = df_new_data.join(pd.json_normalize(parsed_timestamps))
+    df_new_data = df_new_data.merge(pd.json_normalize(parsed_timestamps)) ###smh join(pd.json_normalize(parsed_timestamps))
 
     # Impute means and medians and create imputed value columns for later use
     df_new_data = impute_and_summarize(df_new_data)
