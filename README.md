@@ -118,7 +118,7 @@ The **[KOBO]** section is read to get the configuration info by the **kobo_gen_s
 There is a cloud based Postgres DB, the **config.ini** file stored in  is set to use it:
 
 
-A working "config.ini" file is available at:![kobo db](../DOCS/kobo-db.png)
+A working "config.ini" file is available at:![kobo db](./DOCS/kobo-db.png)
 
 
 
