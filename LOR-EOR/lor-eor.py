@@ -99,18 +99,21 @@ print('XXXXXXXXX',meter_serials)
 rt_st = dt.now()
 ###meter_serials = meter_serials[-3:]
 for serial in    meter_serials:
-    if serial[0] in ['009-80B76']: continue
-    #if serial[0] not in ['009-80A9E']: continue  # can not handle site with 2 generators yet
+    ### For testing
+    # if serial[0] not in ['009-80B7A','009-80B77']:
+    #     continue
+  
     db = serial[0]
     ts = pd.read_sql_query(f'select max(`Timestamp`) from `{serial[0]}`',con=ENGINE).values[0][0]
 
     # This is the first valid data for 009-80E29
     # TODO we need a way to determine this for a particular GB
     print(ts)
-    if ts is None: ts = 1710460800   ####1682942400
+    if ts is None: ts = 1704067200   ####2024-01-01
 
     done = 0
     kwh = []
+    found = False
     executed = False
     while True and done < 1000:
         done += 1
@@ -121,16 +124,20 @@ for serial in    meter_serials:
             print('EEEEEEEEEEEEEEEEEEEEEE',meterDataWh['Errors'])
             if len(kwh) == 0: executed = True
             break
-        if len(meterDataWh['Data']['Wh'][0]) == 0 or done > 1000: break
+        if (found and len(meterDataWh['Data']['Wh'][0]) == 0) or done > 1000: break
         wh = meterDataWh['Data']['Wh'][0]
         # get the most recent ts for next call to GB API
-        ts = wh[-1][0]
+        if len(wh) == 0:
+            ts += 86400
+        else:
+            ts = wh[-1][0]
         # remove zero wh readings
         for w in wh:
             if w[1] > 0:
                 # ts, wh, kwh, kw
                 kwh.append([w[0], w[1], w[1]/1000, w[1]/250])
         print('len(kwh)', len(kwh))
+        found = len(kwh) != 0
 
     try:
         conn = ENGINE.connect()
