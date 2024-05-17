@@ -665,16 +665,16 @@ report_data = [
 # pw: Unhcr.0077
 
 # ID: unhcrbgl@hotmail.com
-# pw: Unhcrbgl2009@3
+# pw: Unhcrbgl2009@4
 
 # set these before calling getData()
 year = 2024
 month = 4
-day = 20
+day = 28
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
-days = 10
+days = 21
 
 cnt_processed = 0
 site_idx = 0
