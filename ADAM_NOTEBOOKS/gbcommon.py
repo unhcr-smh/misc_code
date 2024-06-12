@@ -27,6 +27,16 @@ def create_db_engine(yr = 2023):
         schema = 'public'
         return create_engine(config['GB_2023']['CREATE_ENGINE'], connect_args={'options': '-csearch_path=public'}), schema
 
+def no_trans(eng, sql):
+    connection = eng.connect()
+
+    # commiting will end a transaction
+    #connection.execute("COMMIT")
+
+    # now this query runs fine
+    with eng.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
+        result = connection.execute(sql)
+        print('TTTTTTTTTTTTTTTT', result)
 
 def dt2utc(dtt):
     if dtt.tzinfo is None or dtt.tzinfo.utcoffset(dtt) is None:

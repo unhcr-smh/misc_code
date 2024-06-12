@@ -41,10 +41,18 @@ print('AAAAAAA meters', len(L_SQL_SERIALS))
 perf_st = time.perf_counter()
 for serial in sorted(L_SQL_SERIALS):
 
-    # if idx <= 130:     # to pickup if there's an interruption or failure
-    #     idx -=1
+    if idx > 70:     # to pickup if there's an interruption or failure
+        idx -=1
+        continue
+    '''
+    00980B77  usage yesterday
+    00980B7A  usage today
+    00980AA1  
+  
+    
+    '''
+    # if serial != '00980AA1':
     #     continue
-
 
     rt_st = dt.now()
     serial_st = time.perf_counter()
@@ -69,6 +77,9 @@ for serial in sorted(L_SQL_SERIALS):
             serial_et = time.perf_counter()
             idx -= 1
             print(idx, "{:.2f}".format(serial_et - serial_st), serial)
+            ##### can not run inside a transaction 
+            #gb.no_trans(ENGINE, 'vacuum full %s."%s";' % (schema,serial))
+            ##pd.read_sql_query('vacuum full "%s";' % serial,con=ENGINE)
             continue
 
         # Create a list of midnight timestamps between max_timestamp and current_timestamp to pass to the API call
