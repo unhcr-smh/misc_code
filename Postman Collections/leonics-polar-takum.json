@@ -42,7 +42,56 @@
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
-			"response": []
+			"response": [
+				{
+					"id": "66738a15-5885-455a-b9c7-bd99bbef01f6",
+					"name": "Get data",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}?X-API_KEY={{key}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"query": [
+								{
+									"key": "X-API_KEY",
+									"value": "{{key}}"
+								}
+							]
+						}
+					},
+					"status": "FORBIDDEN",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.3 Python/3.11.5"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 14 Jun 2024 13:30:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "37"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n    \"error\": \"Unauthorized access\"\n}"
+				}
+			]
 		},
 		{
 			"name": "Post data",
@@ -179,6 +228,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
+				"id": "b6b4d9c7-627f-4af0-a4b9-c6b31936c778",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -188,6 +238,7 @@
 		{
 			"listen": "test",
 			"script": {
+				"id": "097cd3ab-dc94-4ad1-a773-d597d627d0b2",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -197,14 +248,17 @@
 	],
 	"variable": [
 		{
-			"id": "530bbdd9-38d3-441e-92dc-61f171c18dc2",
 			"key": "id",
 			"value": "1"
 		},
 		{
-			"id": "57b5ecc1-1ffd-4eb5-a9a4-fa78c5251c5d",
 			"key": "base_url",
-			"value": "https://postman-rest-api-learner.glitch.me/"
+			"value": "http://www.leonics-moc.com:51280/data/SharedData.xml"
+		},
+		{
+			"key": "key",
+			"value": "jYpC8AS_4zgIG0TVQkXaJLB24zdbgyAdSQedXB-j5d4",
+			"type": "string"
 		}
 	]
 }
