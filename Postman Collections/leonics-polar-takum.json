@@ -220,7 +220,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "24f53239-5769-40f7-8886-880b7af96f1d",
+				"id": "072f4fd9-6c96-4dc9-8d8f-88d69dcc3f68",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -230,7 +230,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "5abd7c06-df5b-4d26-9b8f-edef078f7523",
+				"id": "d45c1ba5-eda3-409f-9b7c-b812cf8ba245",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -265,7 +265,7 @@
 		},
 		{
 			"key": "fn-xml",
-			"value": "UNHCR_20240605_20240611",
+			"value": "UNHCR_20240605_20240611.xml",
 			"type": "string"
 		}
 	]
