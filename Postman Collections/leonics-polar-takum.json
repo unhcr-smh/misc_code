@@ -7,11 +7,12 @@
 	},
 	"item": [
 		{
-			"name": "Get data",
+			"name": "Get data shared -- works",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
+						"id": "11f9699f-5768-495c-9d5a-5361affabc78",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -22,76 +23,67 @@
 				}
 			],
 			"id": "5e04cbde-34ed-47c9-8498-c501bc2ddce7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/info?id=1",
+					"raw": "{{base_url}}{{fn-shared}}?X-API-KEY={{key}}",
 					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"info"
+						"{{base_url}}{{fn-shared}}"
 					],
 					"query": [
 						{
-							"key": "id",
-							"value": "1"
+							"key": "X-API-KEY",
+							"value": "{{key}}",
+							"type": "text"
 						}
 					]
 				},
 				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
 			},
-			"response": [
+			"response": []
+		},
+		{
+			"name": "Get data xml -- does not works",
+			"event": [
 				{
-					"id": "66738a15-5885-455a-b9c7-bd99bbef01f6",
-					"name": "Get data",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}?X-API_KEY={{key}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"query": [
-								{
-									"key": "X-API_KEY",
-									"value": "{{key}}"
-								}
-							]
-						}
-					},
-					"status": "FORBIDDEN",
-					"code": 403,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Server",
-							"value": "Werkzeug/3.0.3 Python/3.11.5"
-						},
-						{
-							"key": "Date",
-							"value": "Fri, 14 Jun 2024 13:30:59 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Content-Length",
-							"value": "37"
-						},
-						{
-							"key": "Connection",
-							"value": "close"
-						}
-					],
-					"cookie": [],
-					"responseTime": null,
-					"body": "{\n    \"error\": \"Unauthorized access\"\n}"
+					"listen": "test",
+					"script": {
+						"id": "11f9699f-5768-495c-9d5a-5361affabc78",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
-			]
+			],
+			"id": "ff01dbcd-fc9c-42c2-bb59-c5daa940c36f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}{{fn-xml}}?X-API-KEY={{key}}",
+					"host": [
+						"{{base_url}}{{fn-xml}}"
+					],
+					"query": [
+						{
+							"key": "X-API-KEY",
+							"value": "{{key}}"
+						}
+					]
+				},
+				"description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+			},
+			"response": []
 		},
 		{
 			"name": "Post data",
@@ -228,7 +220,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "4904d008-33d5-4d62-9490-a50562bd4723",
+				"id": "24f53239-5769-40f7-8886-880b7af96f1d",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -238,7 +230,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "82698f88-11ab-43ed-b0c3-de8192213173",
+				"id": "5abd7c06-df5b-4d26-9b8f-edef078f7523",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -254,11 +246,26 @@
 		},
 		{
 			"key": "base_url",
-			"value": "http://www.leonics-moc.com:51280/data/SharedData.xml"
+			"value": "http://www.leonics-moc.com:51280/data/"
 		},
 		{
 			"key": "key",
 			"value": "jYpC8AS_4zgIG0TVQkXaJLB24zdbgyAdSQedXB-j5d4",
+			"type": "string"
+		},
+		{
+			"key": "fn-shared",
+			"value": "SharedData.xml",
+			"type": "string"
+		},
+		{
+			"key": "fn-xml",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "fn-xml",
+			"value": "UNHCR_20240605_20240611",
 			"type": "string"
 		}
 	]
