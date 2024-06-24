@@ -669,8 +669,8 @@ report_data = [
 
 # set these before calling getData()
 year = 2024
-month = 5
-day = 31
+month = 6
+day = 12
 date = datetime.datetime(year, month, day)
 offset_hrs = 1
 tz = 'Africa/Algiers'
