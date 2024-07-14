@@ -214,6 +214,61 @@
 				"description": "This is a DELETE request, and it is used to delete data that was previously created via a POST request. You typically identify the entity being updated by including an identifier in the URL (eg. `id=1`).\n\nA successful DELETE request typically returns a `200 OK`, `202 Accepted`, or `204 No Content` response code."
 			},
 			"response": []
+		},
+		{
+			"name": "GALOOLI",
+			"id": "90420487-d294-4bf4-ad7c-eed0f568a485",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://sdk.galooli-systems.com/Json/Events_Report?userName=unhcrbgl@hotmail.com%26Biohenry Generators Ltd&password=Unhcrbgl2009@4&requestedPropertiesStr=unit_name,event_time,event_name,event_value&startTime=2023-11-01 00:00:00&endTime=2023-12-01 00:00:00&requestedEvents=any&requestedUnits=u7214675",
+					"protocol": "https",
+					"host": [
+						"sdk",
+						"galooli-systems",
+						"com"
+					],
+					"path": [
+						"Json",
+						"Events_Report"
+					],
+					"query": [
+						{
+							"key": "userName",
+							"value": "unhcrbgl@hotmail.com%26Biohenry Generators Ltd"
+						},
+						{
+							"key": "password",
+							"value": "Unhcrbgl2009@4"
+						},
+						{
+							"key": "requestedPropertiesStr",
+							"value": "unit_name,event_time,event_name,event_value"
+						},
+						{
+							"key": "startTime",
+							"value": "2023-11-01 00:00:00"
+						},
+						{
+							"key": "endTime",
+							"value": "2023-12-01 00:00:00"
+						},
+						{
+							"key": "requestedEvents",
+							"value": "any"
+						},
+						{
+							"key": "requestedUnits",
+							"value": "u7214675"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
