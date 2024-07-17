@@ -206,7 +206,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/data?API-KEY={{API-KEY}}&BEGIN=20240606&END=20240612",
+					"raw": "{{base_url}}/data?API-KEY={{API-KEY}}&BEGIN=20240606&END=20240606",
 					"host": [
 						"{{base_url}}"
 					],
@@ -224,7 +224,7 @@
 						},
 						{
 							"key": "END",
-							"value": "20240612"
+							"value": "20240606"
 						}
 					]
 				},
