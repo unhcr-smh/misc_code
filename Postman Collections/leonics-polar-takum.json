@@ -91,30 +91,35 @@
 				{
 					"listen": "test",
 					"script": {
+						"id": "e10b43af-eb09-4f91-b55d-314fbfe82008",
 						"exec": [
 							"pm.test(\"Successful POST request\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
 							""
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
 			"id": "fb3546da-b5de-4c02-9882-7ae10e0a7eef",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Add your name in the body\"\n}",
+					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"2024-06-24\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "{{base_url}}/info",
+				"url": "{{base_url}}/auth",
 				"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
 			},
 			"response": []
