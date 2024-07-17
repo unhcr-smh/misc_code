@@ -98,9 +98,9 @@
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
 							"",
-							"var txt = pm.response",
-							"console.log(pm.response.body,txt)",
-							"//pm.collectionVariables.set(\"API-KEY\", txt.replace(\"API-KEY \",\"\"));",
+							"var txt = pm.response.text()",
+							"console.log(pm.response,txt)",
+							"pm.collectionVariables.set(\"API-KEY\", txt.replace(\"API-KEY \",\"\"));",
 							""
 						],
 						"type": "text/javascript",
@@ -332,6 +332,10 @@
 			"key": "fn-xml",
 			"value": "UNHCR_20240605_20240611.xml",
 			"type": "string"
+		},
+		{
+			"key": "API-KEY",
+			"value": ""
 		}
 	]
 }
