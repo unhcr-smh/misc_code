@@ -97,8 +97,8 @@
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
 							"",
-							"var response = JSON.parse(JSON.stringify(pm.response).slice(0, -1))",
-							"pm.collectionVariables.set(\"API-KEY\", response.API-KEY);",
+							"var txt = pm.response.body.slice(0, -1)",
+							"pm.collectionVariables.set(\"API-KEY\", txt.replace(\"API-KEY \",\"\"));",
 							""
 						],
 						"type": "text/javascript",
