@@ -98,9 +98,9 @@
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
 							"",
-							"var json = JSON.parse('{'+pm.response.text().slice(0,-1)+'}')",
+							"var json = JSON.parse('{'+pm.response.text().replace(': ','\": \"')+'}')",
 							"console.log(pm.response,json)",
-							"pm.collectionVariables.set(\"API-KEY\", json.API-KEY);",
+							"pm.collectionVariables.set(\"API-KEY\", json['API-KEY']);",
 							""
 						],
 						"type": "text/javascript",
@@ -285,7 +285,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "500f36f4-921c-4822-9c6e-7dab15856aae",
+				"id": "326709c9-9c2f-468d-a717-7d1c45733701",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -295,7 +295,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "f8cca9d2-cfbd-4514-b5e6-da9cc2087c1c",
+				"id": "7e13feae-19cb-4b56-9dfd-e67c32fbc9a8",
 				"type": "text/javascript",
 				"exec": [
 					""
