@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Get data shared -- works",
+			"name": "Get CHECK AUTH",
 			"event": [
 				{
 					"listen": "test",
@@ -18,7 +18,8 @@
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
@@ -30,15 +31,17 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}{{fn-shared}}?X-API-KEY={{key}}",
+					"raw": "{{base_url}}/check_auth?API-KEY={{API-KEY}}",
 					"host": [
-						"{{base_url}}{{fn-shared}}"
+						"{{base_url}}"
+					],
+					"path": [
+						"check_auth"
 					],
 					"query": [
 						{
-							"key": "X-API-KEY",
-							"value": "{{key}}",
-							"type": "text"
+							"key": "API-KEY",
+							"value": "{{API-KEY}}"
 						}
 					]
 				},
