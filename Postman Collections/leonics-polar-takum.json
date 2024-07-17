@@ -93,12 +93,14 @@
 					"script": {
 						"id": "e10b43af-eb09-4f91-b55d-314fbfe82008",
 						"exec": [
+							"// Fixed ReferenceError by removing undefined variable 'response'",
 							"pm.test(\"Successful POST request\", function () {",
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
 							"",
-							"var txt = pm.response.body.slice(0, -1)",
-							"pm.collectionVariables.set(\"API-KEY\", txt.replace(\"API-KEY \",\"\"));",
+							"var txt = pm.response",
+							"console.log(pm.response.body,txt)",
+							"//pm.collectionVariables.set(\"API-KEY\", txt.replace(\"API-KEY \",\"\"));",
 							""
 						],
 						"type": "text/javascript",
