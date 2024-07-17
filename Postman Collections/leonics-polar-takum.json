@@ -50,7 +50,7 @@
 			"response": []
 		},
 		{
-			"name": "Get data xml -- does not works",
+			"name": "Get data/files",
 			"event": [
 				{
 					"listen": "test",
@@ -61,11 +61,12 @@
 							"    pm.response.to.have.status(200);",
 							"});"
 						],
-						"type": "text/javascript"
+						"type": "text/javascript",
+						"packages": {}
 					}
 				}
 			],
-			"id": "ff01dbcd-fc9c-42c2-bb59-c5daa940c36f",
+			"id": "f13157cf-350f-4d45-9f7a-ba635fde09fe",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -73,14 +74,18 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}{{fn-xml}}?X-API-KEY={{key}}",
+					"raw": "{{base_url}}/data/files?API-KEY={{API-KEY}}",
 					"host": [
-						"{{base_url}}{{fn-xml}}"
+						"{{base_url}}"
+					],
+					"path": [
+						"data",
+						"files"
 					],
 					"query": [
 						{
-							"key": "X-API-KEY",
-							"value": "{{key}}"
+							"key": "API-KEY",
+							"value": "{{API-KEY}}"
 						}
 					]
 				},
