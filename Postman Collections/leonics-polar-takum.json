@@ -275,7 +275,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "2c189da9-f535-4003-89ac-06313acd9d2a",
+				"id": "500f36f4-921c-4822-9c6e-7dab15856aae",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -285,7 +285,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "c006331e-4089-4f04-a98a-1f70b92d9abd",
+				"id": "f8cca9d2-cfbd-4514-b5e6-da9cc2087c1c",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -301,7 +301,7 @@
 		},
 		{
 			"key": "base_url",
-			"value": "http://www.leonics-moc.com:51280/data/"
+			"value": "http://www.leonics-moc.com:51280"
 		},
 		{
 			"key": "key",
