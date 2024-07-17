@@ -98,9 +98,9 @@
 							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
 							"});",
 							"",
-							"var txt = pm.response.text()",
-							"console.log(pm.response,txt)",
-							"pm.collectionVariables.set(\"API-KEY\", txt.replace(\"API-KEY \",\"\"));",
+							"var json = JSON.parse('{'+pm.response.text().slice(0,-1)+'}')",
+							"console.log(pm.response,json)",
+							"pm.collectionVariables.set(\"API-KEY\", json.API-KEY);",
 							""
 						],
 						"type": "text/javascript",
