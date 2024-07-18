@@ -253,6 +253,19 @@
 						"type": "text/javascript",
 						"packages": {}
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "34df2a94-5949-43ca-b613-817aaaf50359",
+						"exec": [
+							"var moment = require('moment');\r",
+							"\r",
+							"pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
 				}
 			],
 			"id": "fb3546da-b5de-4c02-9882-7ae10e0a7eef",
@@ -264,7 +277,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"2024-06-24\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
+					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": {{currentdate}}, \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
 					"options": {
 						"raw": {
 							"language": "json"
