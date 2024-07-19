@@ -267,7 +267,7 @@
 							"var utc = d.getTime() + (d.getTimezoneOffset() * 60000);\r",
 							"var nd = new Date(utc + (3600000*offset));\r",
 							"console.log(pm.collectionVariables.get('API-KEY'),offset, nd.toISOString())\r",
-							"pm.collectionVariables.set('currentdate',  '2024-07-20');"
+							"pm.collectionVariables.set('currentdate',  nd.toISOString());"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -300,7 +300,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "470dd5d8-7816-4b7f-ab40-95d45a2654eb",
+				"id": "f58499f0-871f-40da-94f0-4a3d36c32f2c",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -310,7 +310,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "1b5af766-6342-48e1-96fd-89cba566e043",
+				"id": "18c23b92-e395-4cac-b5f6-9b9d36ec1b98",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -359,7 +359,7 @@
 		},
 		{
 			"key": "currentdate",
-			"value": ""
+			"value": "2024-07-20"
 		}
 	]
 }
