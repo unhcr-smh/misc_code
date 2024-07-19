@@ -277,7 +277,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": {{currentdate}}, \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
+					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"2024-07-20\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
 					"options": {
 						"raw": {
 							"language": "json"
