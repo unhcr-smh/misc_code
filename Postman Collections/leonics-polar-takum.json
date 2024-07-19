@@ -261,13 +261,14 @@
 						"exec": [
 							"//var moment = require('moment');\r",
 							"//pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));\r",
+							"// currently set to 7 for Thailand, should not have to change\r",
 							"var offset = pm.collectionVariables.get('tz-offset')\r",
 							"\r",
 							"var d = new Date();\r",
 							"var utc = d.getTime() + (d.getTimezoneOffset() * 60000);\r",
 							"var nd = new Date(utc + (3600000*offset));\r",
-							"console.log(pm.collectionVariables.get('API-KEY'),offset, nd.toISOString())\r",
-							"pm.collectionVariables.set('currentdate',  nd.toISOString());"
+							"console.log(pm.collectionVariables.get('API-KEY'),offset, nd.toISOString().substring(0,10))\r",
+							"pm.collectionVariables.set('currentdate',  nd.toISOString().substring(0,10));"
 						],
 						"type": "text/javascript",
 						"packages": {}
