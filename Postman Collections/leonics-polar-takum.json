@@ -262,12 +262,12 @@
 							"//var moment = require('moment');\r",
 							"//pm.environment.set('currentdate', moment().format((\"YYYY-MM-DD\")));\r",
 							"var offset = pm.collectionVariables.get('tz-offset')\r",
-							"const formatter = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit'  });\r",
+							"\r",
 							"var d = new Date();\r",
 							"var utc = d.getTime() + (d.getTimezoneOffset() * 60000);\r",
 							"var nd = new Date(utc + (3600000*offset));\r",
-							"console.log(pm.collectionVariables.get('API-KEY'),offset, formatter.format(nd))\r",
-							"pm.collectionVariables.set('currentdate',  formatter.format(nd));"
+							"console.log(pm.collectionVariables.get('API-KEY'),offset, nd.toISOString())\r",
+							"pm.collectionVariables.set('currentdate',  '2024-07-20');"
 						],
 						"type": "text/javascript",
 						"packages": {}
@@ -283,7 +283,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"{{currentdate}}\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
+					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"2024-07-20\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
 					"options": {
 						"raw": {
 							"language": "json"
