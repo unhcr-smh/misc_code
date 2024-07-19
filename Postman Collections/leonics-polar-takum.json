@@ -300,7 +300,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "f8a871ad-d776-4096-a25b-0bff4152f9ee",
+				"id": "c7016ea3-8c66-4ce4-94ef-321d8aa539e0",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -310,7 +310,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "fc3b6702-9c1e-4846-953e-8eb02d942cd3",
+				"id": "5b7c0473-d652-4164-ad73-2b27949713a6",
 				"type": "text/javascript",
 				"exec": [
 					""
