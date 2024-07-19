@@ -354,6 +354,10 @@
 			"key": "tz-offset",
 			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "currentdate",
+			"value": ""
 		}
 	]
 }
