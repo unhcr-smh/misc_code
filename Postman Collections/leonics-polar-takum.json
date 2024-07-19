@@ -283,7 +283,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"2024-07-20\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
+					"raw": "{\"SystemCode\": \"LEONICS\",\n\"CurrentDate\": \"{{currentdate}}\", \n\"SiteId\": \"unhcr-001\", \n\"UserCode\": \"USER@UNHCR\", \n\"Key\": \"KEY@UNHCR\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -300,7 +300,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "c7016ea3-8c66-4ce4-94ef-321d8aa539e0",
+				"id": "470dd5d8-7816-4b7f-ab40-95d45a2654eb",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -310,7 +310,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "5b7c0473-d652-4164-ad73-2b27949713a6",
+				"id": "1b5af766-6342-48e1-96fd-89cba566e043",
 				"type": "text/javascript",
 				"exec": [
 					""
