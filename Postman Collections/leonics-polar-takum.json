@@ -259,7 +259,8 @@
 					"script": {
 						"id": "34df2a94-5949-43ca-b613-817aaaf50359",
 						"exec": [
-							"var moment = require('moment');\r",
+							"const moment = require('moment');\r",
+							"const momentTimezone = require('moment-timezone');\r",
 							"pm.collectionVariables.set('currentdate', moment.tz(\"Asia/Bangkok\").format('YYYY-MM-DD'));\r",
 							"// currently set to 7 for Thailand, should not have to change\r",
 							"// var offset = pm.collectionVariables.get('tz-offset')\r",
