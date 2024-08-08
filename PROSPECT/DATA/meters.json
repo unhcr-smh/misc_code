@@ -1,0 +1,46 @@
+{ "data": [
+    {
+        "customer_country": "NG",
+        "customer_external_id": "1",
+        "device_external_id": "asset_id_00980785",
+        "serial_number": "009-80785",
+        "manufacturer": "EyeDro",
+        "grid_name": "Abuja",
+        "customer_latitude":9.0621466717435,
+        "customer_longitude":7.52744490642833,
+        "primary_use": "{\"label\": \"Nigeria - BO Abuja\", \"notes\": \"only 1 device\"}"
+      },
+      {
+        "customer_country": "NG",
+        "customer_external_id": "2",
+        "device_external_id": "asset_id_00980AA1",
+        "serial_number": "009-80AA1",
+        "manufacturer": "EyeDro",
+        "grid_name": "Takum",
+        "customer_latitude":7.26436,
+        "customer_longitude":9.98121,
+        "primary_use": "{\"label\": \"Nigeria - FO Takum - Grid\", \"notes\": \"1 of 3 devices\"}"
+      },
+      {
+        "customer_country": "NG",
+        "customer_external_id": "3",
+        "device_external_id": "asset_id_00980B77",
+        "serial_number": "009-80B77",
+        "manufacturer": "EyeDro",
+        "grid_name": "Takum",
+        "customer_latitude":7.26436,
+        "customer_longitude":9.98121,
+        "primary_use": "{\"label\": \"Nigeria - FO Takum - Gen 1 - A\", \"notes\": \"1 of 3 devices\"}"
+      },
+      {
+        "customer_country": "NG",
+        "customer_external_id": "4",
+        "device_external_id": "asset_id_00980B7A",
+        "serial_number": "009-80B7A",
+        "manufacturer": "EyeDro",
+        "grid_name": "Takum",
+        "customer_latitude":7.26436,
+        "customer_longitude":9.98121,
+        "primary_use": "{\"label\": \"Nigeria - FO Takum - Gen 2 - B\", \"notes\": \"1 of 3 devices\"}"
+      }
+    ]}

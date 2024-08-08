@@ -1,0 +1,2923 @@
+{
+    "info": {
+      "title": "API title",
+      "version": "0.0.1"
+    },
+    "swagger": "2.0",
+    "produces": [
+      "application/json"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "host": "app.prospect.energy",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "out",
+        "description": "Operations about outs"
+      },
+      {
+        "name": "in",
+        "description": "Operations about ins"
+      }
+    ],
+    "paths": {
+      "/v1/out/custom/smart_meter/meters": {
+        "get": {
+          "summary": "List of meter ids.",
+          "description": "The method returns an array ids with the meter ids",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity\\n Use the Bearer format with \"Bearer TOKENVALUE\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "callback",
+              "description": "Callback method if you prefer JSONP return",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sample JSON Response: [{\"meter_id\":1375},{\"meter_id\":1377}]"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "list_ids_endpoint",
+          "deprecated": false
+        }
+      },
+      "/v1/out/custom/smart_meter/meta_data": {
+        "get": {
+          "summary": "Meta data for a specific meter.",
+          "description": "The method returns all meta data per meter and the list of appliances installed",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity\\n Use the Bearer format with \"Bearer TOKENVALUE\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "id",
+              "type": "integer",
+              "format": "int32",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "callback",
+              "description": "Callback method if you prefer JSONP return",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Meta data for a specific meter.",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Api_Entities_SmMetaData"
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "metadata_endpoint",
+          "deprecated": false
+        }
+      },
+      "/v1/out/custom/smart_meter/technical_data": {
+        "get": {
+          "summary": "Technical data for a specific meter.",
+          "description": "The method returns an array of Hashes that present the avarage power consumpion of the requested meter in a given resolution",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity\n Use the Bearer format with \"Bearer TOKENVALUE\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "id",
+              "type": "integer",
+              "format": "int32",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "resolution",
+              "description": "Defines the period, if custom is chosen there will be only one period between start and end",
+              "type": "string",
+              "default": "month",
+              "enum": [
+                "hour",
+                "day",
+                "week",
+                "month",
+                "year",
+                "custom"
+              ],
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "from",
+              "description": "Begining of period",
+              "type": "string",
+              "format": "date-time",
+              "default": "2023-07-30T15:52:17.882Z",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "end",
+              "description": "End of period",
+              "type": "string",
+              "format": "date-time",
+              "default": "2024-07-30T15:52:17.882+00:00",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "callback",
+              "description": "Callback method if you prefer JSONP return",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sample JSON Response: [{\n                            \"meterId\": 1380,\n                            \"timestamp\": \"2021-10-01T00:00:00.000Z\",\n                            \"timestampInMillis\": 1633046400,\n                            \"metered_power\": 26.0,\n                            \"energyReadingKwh\": 13.19,\n                            \"customerAccountId\": \"Houènonko\",\n                            \"timeIntervalMinutes\": 43920,\n                            \"energyConsumptionKwh\": 13.19\n                        },]"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "techdata_endpoint",
+          "deprecated": false
+        }
+      },
+      "/v1/out/custom/smart_meter/load_profile": {
+        "get": {
+          "summary": "Day profile of technical data for a specific meter.",
+          "description": "The method returns an array that represents the aggregated day profile of the requested meter for a given time range.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity\n Use the Bearer format with \"Bearer TOKENVALUE\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "id",
+              "type": "integer",
+              "format": "int32",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "range",
+              "description": "Defines the time range of aggregation starting from current date. Weekdays excludes Sat/Sun for calculation.",
+              "type": "string",
+              "default": "month",
+              "enum": [
+                "day",
+                "week",
+                "month",
+                "month_weekdays",
+                "year"
+              ],
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "callback",
+              "description": "Callback method if you prefer JSONP return",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sample JSON Response: [{\n                            \"meterId\": 1380,\n                            \"hourOfTheDay\": 16,\n                            \"averagePower\": 201.1,\n                            \"stdDevPower\": 13.6,\n                            \"maxPower\": 317.8,\n                            \"minPower\": 23.2,\n                            \"numberDatapoints\": 134\n                        },]"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "techprofile_endpoint",
+          "deprecated": false
+        }
+      },
+      "/v1/out/custom": {
+        "get": {
+          "summary": "custom",
+          "description": "This tables saves completely custom data as json. For easier export and graphing per source views with customizable structure are automatically created.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"uid\": \"The UUID - 12434534\", # string, organization_id + external_id; The UUID is autogenerated, either by given external_id or from a random string. This helps to identify and later update the records.\n\"external_id\": \"auto-fvhrznelo482\", # string, An external ID used for updates and deduplication. Either provided or autogenerated during ingress.\n\"id\": \"1\", # integer, Internal primary key\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n\"last_import_id\": \"337\", # integer, Id of the last import which updated the record\n\"last_source_id\": \"33\", # integer, Id of the last Source which updated the record\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutCustom",
+          "deprecated": false
+        }
+      },
+      "/v1/out/grids": {
+        "get": {
+          "summary": "grids",
+          "description": "Static data about electrical grids - minigrids as well as national grids",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"uid\": \"a2ei-grid01\", # string, organization_id + name; Autogenerated unique identifier of the grid\n\"external_id\": \"X98679862w\", # string, ID for the specific (mini-)grid as tracked by the data provider (source)\n\"name\": \"SMU 12 Chinsanka\", # string, name of the (mini-)grid, typically given by operator company\n\"operator_company\": \"Standard Microgrid\", # string, name of the company which operates the (mini-)grid\n\"location_area_1\": \"Luapola\", # string, (mini-)grid first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"location_area_2\": \"Samfya\", # string, (mini-)grid second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"location_area_3\": \"None\", # string, (mini-)grid third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"location_area_4\": \"None\", # string, (mini-)grid fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"country\": \"TZ\", # string, two-letter country code according to ISO 3166-1 alpha-2\n\"latitude\": 5.432, # float, geo location latitude\n\"longitude\": 2.345, # float, geo location longitude\n\"power_rating_kw\": 2.8, # float, highest power input allowed to flow through inverter in kilowatt\n\"primary_input_installed_kw\": 2.5, # float, sum of installed primary peak power in kilowatt\n\"secondary_input_installed_kw\": 3.2, # float, sum of installed secondary peak power in kilowatt\n\"primary_input_source\": \"solar\", # string, e.g. solar\n\"secondary_input_source\": \"diesel generator\", # string, e.g. diesel generator\n\"is_offgrid\": \"true\", # boolean, indicates whether the grid is a national grid (FALSE) or a mini-grid (TRUE)\n\"storage_capacity_kwh\": 5.8, # float, maximum storage capacity in kilowatt hour\n\"operator_phone_p\": ***,  # pseudonymized, operator telephone (p14)\n\"operator_phone_e\": ***,  # encrypted, operator telephone (p14)\n\"id\": \"1\", # integer, Internal primary key\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n\"last_import_id\": \"337\", # integer, Id of the last import which updated the record\n\"last_source_id\": \"33\", # integer, Id of the last Source which updated the record\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutGrids",
+          "deprecated": false
+        }
+      },
+      "/v1/out/grids_ts": {
+        "get": {
+          "summary": "grids_ts",
+          "description": "Time Series data of individual grids",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"grid_uid\": \"a2ei-grid01\", # string, organization_id + grid_name; FK from grids table\n\"grid_name\": \"SMU 12 Chinsanka\", # string, Name of of the (mini-)grid, used to build the grid_uid\n\"metered_at\": \"2022-01-01 13:00:00.000Z\", # datetime, time the metrics apply to (not time of query)\n\"primary_source_to_customer_kwh\": 5.234, # float, PV to consumers in kilowatt hour\n\"primary_source_to_battery_kwh\": 0.0, # float, PV to battery in kilowatt hour\n\"secondary_source_to_customer_kwh\": 1.1, # float, genset to consumers in kilowatt hour\n\"secondary_source_to_battery_kwh\": 0.0, # float, genset to battery in kilowatt hour (will probably be 0)\n\"battery_to_customer_kwh\": 10.234, # float, battery to consumers in kilowatt hour\n\"battery_charge_state_percent\": 88.2, # float, battery charge level in percentage\n\"interval_seconds\": 3600, # integer, interval for kilowatt hour\n\"households_connected\": 245, # integer, statistic that is calculated based on separate raw data\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutGridsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/meter_events_ts": {
+        "get": {
+          "summary": "meter_events_ts",
+          "description": "Time Series data of events processed from meters_ts",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"device_uid\": \"1_a2ei_ABC123\", # string, organization_id + manufacturer + serial_number; FK from meters table\n\"manufacturer\": \"A2EI\", # string, Manufacturer of the device\n\"serial_number\": \"ABC/123\", # string, Serial of the device\n\"start_at\": \"2021-05-03 6:23:55\", # datetime, time the event started\n\"end_at\": \"2021-05-03 8:11:21\", # datetime, time the event ended\n\"duration_sec\": 32443, # integer, time the event was lasting rounded to seconds\n\"energy_start_wh\": 1646.5, # float, energy value at start time in watt-hour\n\"energy_end_wh\": 1758.9, # float, energy value at end time in watt-hour\n\"energy_consumed_wh\": 112.4, # float, energy value used for the event watt-hour\n\"category\": \"cooking\", # string, type of event\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutMeterEventsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/meters": {
+        "get": {
+          "summary": "meters",
+          "description": "Represents installations of on-grid or mini-grid meters at a specific customer.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"uid\": \"123-123\", # string, customer_uid + device_uid\n\"customer_external_id\": \"1\", # string, ID for the specific customer associated with the meter\n\"customer_name_p\": ***,  # pseudonymized, customer first and last name (p14)\n\"customer_name_e\": ***,  # encrypted, customer first and last name (p14)\n\"customer_id_number_p\": ***,  # pseudonymized, customer identification number\n\"customer_id_number_e\": ***,  # encrypted, customer identification number\n\"customer_id_type\": \"National ID\", # string, type of customer identification\n\"customer_gender\": \"M\", # enum, Male, Female, Other, or Unknown (null)\n\"customer_birth_year\": 1990, # integer, year of purchaser birth, for demographic analysis\n\"customer_former_electricity_source\": \"none\", # string, e.g. none, solar, genset\n\"customer_household_size\": 5, # integer, number of residents of household (if residential use)\n\"customer_profession\": \"farmer\", # string, Profession of the customer - e.g. farmer or shop owner\n\"customer_address_p\": ***,  # pseudonymized, customer address\n\"customer_address_e\": ***,  # encrypted, customer address\n\"customer_country\": \"ZM\", # string, two-letter country code according to ISO 3166-1 alpha-2\n\"customer_latitude_b\": 12.123, # float, customer latitude (blurred to 3 decimal points)\n\"customer_latitude_p\": ***,  # pseudonymized, customer latitude (blurred to 3 decimal points)\n\"customer_latitude_e\": ***,  # encrypted, customer latitude (blurred to 3 decimal points)\n\"customer_longitude_b\": 20.456, # float, customer longitude (blurred to 3 decimal points)\n\"customer_longitude_p\": ***,  # pseudonymized, customer longitude (blurred to 3 decimal points)\n\"customer_longitude_e\": ***,  # encrypted, customer longitude (blurred to 3 decimal points)\n\"customer_email_p\": ***,  # pseudonymized, customer email (p14)\n\"customer_email_e\": ***,  # encrypted, customer email (p14)\n\"customer_phone_p\": ***,  # pseudonymized, customer telephone (p14)\n\"customer_phone_e\": ***,  # encrypted, customer telephone (p14)\n\"customer_phone_2_p\": ***,  # pseudonymized, customer telephone 2 (p14)\n\"customer_phone_2_e\": ***,  # encrypted, customer telephone 2 (p14)\n\"customer_location_area_1\": \"Western\", # string, customer first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_2\": \"Bundibugyo\", # string, customer second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_3\": \"Bughendera County\", # string, customer third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_4\": \"Bukonzo\", # string, customer fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_5\": \"Buhundu\", # string, customer fifth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"device_external_id\": \"1234\", # string, ID for the specific meter tracked by the data provider (source)\n\"serial_number\": \"A1233754345JL\", # string, serial number of system\n\"installation_date\": \"2021-01-01\", # date, date system was installed\n\"purchase_date\": \"2022-01-01\", # date, if meter is part of an installation - date system was purchased\n\"firmware_version\": \"1.2-rc3\", # string, firmware version installed on the smart meter / modem\n\"manufacturer\": \"HOP\", # string, manufacturer of system, needed to make ID when combined with serial number\n\"model\": \"DTZ1737\", # string, specific model of system\n\"customer_category\": \"commercial\", # string, how the system is to be used: \\\"household\\\", \\\"institutional\\\", \\\"commercial\\\"\n\"customer_sub_category\": \"barber shop\", # string, which type of business, which institution\n\"account_external_id\": \"11223344\", # string, ID for the specific account (e.g. paygo loan) associated with the meter\n\"payment_plan\": \"Medium Consumption\", # string, monthly or annual payment plan - e.g. Medium Consumption or High Consumption, paygo or cash\n\"payment_plan_days\": 720.5, # float, if meter is part of an installation with loan - repayment plan of loan\n\"payment_plan_down_payment\": 1500.0, # float, if meter is part of an installation with loan - amount paid at time of purchase\n\"payment_plan_amount_financed\": 1500.0, # float, if meter is part of an installation with loan - amount to be repaid after down payment\n\"total_price\": 130000, # float, Total sales price of the device\n\"payment_plan_currency\": \"ZMW\", # string, if meter is part of an installation with loan - currency code of payment plan, in ISO 4217 three character format\n\"primary_use\": \"cooking\", # string, what type of appliance (if any) is attached? - e.g. cooking, milling, tv\n\"repossession_date\": \"2022-01-01\", # date, date system was repossessed, null if not repossessed\n\"is_locked\": \"FALSE\", # boolean, no energy coming through\n\"max_power_w\": 5000, # float, max connection max load in watts\n\"is_test\": \"true\", # boolean, Is the system installed in the fiel (FALSE) or for testing purposes (TRUE)\n\"device_uid\": \"1-a2ei-ABC123\", # string, organization_id + manufacturer + serial_number\n\"customer_uid\": \"1-api-1\", # string, organization_id + data_origin + customer_external_id\n\"account_uid\": \"1-api-1\", # string, organization_id + data_origin + account_external_id\n\"grid_uid\": \"a2ei-grid01\", # string, organization_id + grid_name; FK from grids table\n\"grid_name\": \"SMU 12 Chinsanka\", # string, name of the (mini-)grid the meter is connected to, typically given by operator company. Used to identifies the grid.\n\"id\": \"1\", # integer, Internal primary key\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n\"last_import_id\": \"337\", # integer, Id of the last import which updated the record\n\"last_source_id\": \"33\", # integer, Id of the last Source which updated the record\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutMeters",
+          "deprecated": false
+        }
+      },
+      "/v1/out/meters_ts": {
+        "get": {
+          "summary": "meters_ts",
+          "description": "Time Series data of individual meters",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "metered_at_from",
+              "description": "start of intervall. The results contain metered_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "metered_at_to",
+              "description": "end of intervall. The results contain metered_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"device_uid\": \"1_a2ei_ABC123\", # string, organization_id + manufacturer + serial_number; FK from meters table\n\"manufacturer\": \"A2EI\", # string, Manufacturer of the device\n\"serial_number\": \"ABC/123\", # string, Serial of the device\n\"metered_at\": \"2021-05-03 6:23:55\", # datetime, time the metrics apply to (not time of query)\n\"phase\": \"1\", # enum, 1,2,3; default: 1\n\"voltage_v\": 164.65, # float, voltage in volts\n\"power_factor\": 0.45, # float, ratio of working power to the apparent power, value between from 0 and 1\n\"power_w\": 1489.6, # float, power in watts\n\"energy_lifetime_wh\": 12473.02, # float, cumulative energy reading in watt-hour\n\"energy_interval_wh\": 51.04, # float, energy consumption at time interval in watt-hour\n\"frequency_hz\": 58.93, # float, frequency in hertz\n\"current_a\": 22.61, # float, current in ampere\n\"interval_seconds\": 360, # integer, for remotely monitored systems, interval between measurements\n\"billing_cycle_start_at\": \"2021-04-05\", # datetime, timestamp on which the tariff cycle starts\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutMetersTs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/paygo_accounts_snapshots_ts": {
+        "get": {
+          "summary": "paygo_accounts_snapshots_ts",
+          "description": "Time Series data of events processed from meters_ts",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"account_uid\": \"1_a2ei_ABC123\", # string, organization_id + data_origin + account_external_id; FK to accounts table\n\"snapshot_date\": \"2021-05-03\", # date, Date for which snapshot is calculated for.\n\"account_status\": \"active\", # enum, active, completed, defaulted, cancelled, locked, returned\n\"days_in_repayment\": 5, # integer, When negative: Days until paygo period starts - account is in downpayment period.  Then counts up from zero when paygo repayment period starts.\n\"cumulative_paid_amount\": 500.0, # float, The accumulated amount the customer paid to this snapshot date.\n\"days_to_cutoff\": 7, # integer, How many days until system will switch off. Negative if locked for N days.\n\"cumulative_days_locked\": 2, # integer, How many days system was off over its lifetime.\n\"total_remaining_amount\": 4500.0, # float, How much money is left to payoff the system.\n\"account_external_id\": \"11223344\", # string, id for the specific account (e.g. paygo loan) associated with the shs device; FK to accounts table\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutPaygoAccountsSnapshotsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/payments_ts": {
+        "get": {
+          "summary": "payments_ts",
+          "description": "Payment time series data for SHS Accounts or Meter Accounts",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"uid\": \"meters-1-generic-1234abcd-ABC-123-2022-07-30 14:45:32.876Z\", # string, account_origin + account_uid + payment_external_id + paid_at\n\"payment_external_id\": \"ABC-123\", # string, ID for the specific payment as tracked by the data provider (source)\n\"purpose\": \"Paygo Payment\", # string, e.g.: Paygo payment, Loan repayment, cash purchase, tariff payment, etc.\n\"paid_at\": \"2022-07-30 14:45:32.876Z\", # datetime, date payment was made (including time if available)\n\"amount\": 150.5, # float, amount of payment, in whatever currency is specified\n\"currency\": \"ZMW\", # string, currency in which payment was made according to ISO code https://en.wikipedia.org/wiki/List_of_circulating_currencies\n\"purchase_item\": \"Uptime\", # string, item or rate which was purchased with the payment, e.g. 'Energy', 'TV', 'Uptime'\n\"purchase_unit\": \"days\", # string, unit of the purchase, e.g. 'wh', 'pcs', 'days'\n\"purchase_quantity\": 3.0, # float, amount of units of the item purchased\n\"provider_name\": \"MTN\", # string, who provided payment for particular payment (e.g. airtel, cash, MTN)\n\"provider_transaction_id\": \"12345X\", # string, data validation, was transaction actually done\n\"reverted_at\": \"2022-07-30 14:48:20.876Z\", # datetime, datetime of when payment was reverted\n\"days_active\": 7.2, # float, information from shs table, is calculated\n\"account_external_id\": \"1234abcd\", # string, external id for the specific account (e.g. paygo loan) associated with the shs or meter\n\"account_uid\": \"1-generic-1234abcd\", # string, organization_id + data_origin + account_external_id\n\"account_origin\": \"meters\", # enum, The table where we find the matching account_uid\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n\"last_import_id\": \"337\", # integer, Id of the last import which updated the record\n\"last_source_id\": \"33\", # integer, Id of the last Source which updated the record\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutPaymentsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/shs": {
+        "get": {
+          "summary": "shs",
+          "description": "Represents installations of Solar Home Systems at individual customers",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"uid\": \"123-456\", # string, customer_uid + device_uid\n\"device_external_id\": \"x98679862w\", # string, id for the specific shs system as tracked by the data provider (source)\n\"account_external_id\": \"11223344\", # string, id for the specific account (e.g. paygo loan) associated with the shs device\n\"serial_number\": \"a1233754345jl\", # string, serial number of system\n\"purchase_date\": \"2022-01-01\", # date, date system was purchased\n\"manufacturer\": \"Spark\", # string, manufacturer of system, needed to make id when combined with serial number\n\"model\": \"SMRSD\", # string, model of system, needed e.g. for matching eligible systems of an rbf program\n\"pv_power_w\": 30.0, # float, PV panel size in watts\n\"battery_energy_wh\": 500.0, # float, battery capacity in watt-hour\n\"voltage_v\": 12.0, # float, system voltage in volts; e.g. - 5, 12 if DC or 110, 230 if AC\n\"rated_power_w\": 30.0, # float, max rated capacity in watts\n\"customer_category\": \"commercial\", # string, how the system is to be used: \\\"household\\\", \\\"institutional\\\", \\\"commercial\\\"\n\"customer_sub_category\": \"barber shop\", # string, which type of business, which institution\n\"primary_use\": \"refrigerator\", # string, what appliance is the main load of system\n\"payment_plan_days\": 720.5, # float, repayment plan of system/loan\n\"payment_plan_down_payment\": 1500.0, # float, amount paid at time of purchase, total cost if paid in full at purchase\n\"payment_plan_amount_financed\": 1500.0, # float, amount to be repaid after down payment, 0 if paid in full at purchase\n\"total_price\": 130000, # float, Total sales price of the device\n\"payment_plan_type\": \"paygo\", # string, \\\"paygo\\\" or \\\"full\\\" if paid in full at purchase\n\"payment_plan_currency\": \"ZMW\", # string, currency code of payment plan, in ISO 4217 three character format\n\"paid_off_date\": \"2022-05-14\", # date, date system was paid off, null if not paid off\n\"repossession_date\": \"2022-03-20\", # date, date system was repossessed, null if not repossessed\n\"is_test\": \"false\", # boolean, is a test system, should be excluded in overall analyses\n\"customer_external_id\": \"123\", # string, ID for the specific customer associated with the shs device\n\"customer_name_p\": ***,  # pseudonymized, customer first and last name (p14)\n\"customer_name_e\": ***,  # encrypted, customer first and last name (p14)\n\"customer_id_number_p\": ***,  # pseudonymized, customer identification number\n\"customer_id_number_e\": ***,  # encrypted, customer identification number\n\"customer_id_type\": \"National ID\", # string, type of customer identification\n\"customer_gender\": \"M\", # enum, Male, Female, Other, or Unknown (null)\n\"customer_birth_year\": 1990, # integer, year of purchaser birth, for demographic analysis\n\"customer_former_electricity_source\": \"none\", # string, e.g. none, solar, genset\n\"customer_household_size\": 5, # integer, Number of residents of household (if residential use)\n\"customer_profession\": \"farmer\", # string, profession of customer - e.g. farmer or shop owner\n\"customer_address_p\": ***,  # pseudonymized, customer address (p14)\n\"customer_address_e\": ***,  # encrypted, customer address (p14)\n\"customer_country\": \"ZM\", # string, two-letter country code according to https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\n\"customer_latitude_b\": 12.123, # float, customer latitude (blurred to 3 decimal points)\n\"customer_latitude_p\": ***,  # pseudonymized, customer latitude (blurred to 3 decimal points)\n\"customer_latitude_e\": ***,  # encrypted, customer latitude (blurred to 3 decimal points)\n\"customer_longitude_b\": -20.456, # float, customer longitude (blurred to 3 decimal points)\n\"customer_longitude_p\": ***,  # pseudonymized, customer longitude (blurred to 3 decimal points)\n\"customer_longitude_e\": ***,  # encrypted, customer longitude (blurred to 3 decimal points)\n\"customer_email_p\": ***,  # pseudonymized, customer email (p14)\n\"customer_email_e\": ***,  # encrypted, customer email (p14)\n\"customer_phone_p\": ***,  # pseudonymized, customer telephone (p14)\n\"customer_phone_e\": ***,  # encrypted, customer telephone (p14)\n\"customer_phone_2_p\": ***,  # pseudonymized, customer telephone 2 (p14)\n\"customer_phone_2_e\": ***,  # encrypted, customer telephone 2 (p14)\n\"customer_location_area_1\": \"Western\", # string, customer first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_2\": \"Bundibugyo\", # string, customer second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_3\": \"Bughendera County\", # string, customer third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_4\": \"Bukonzo\", # string, customer fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"customer_location_area_5\": \"Buhundu\", # string, customer fifth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"seller_external_id\": \"12345\", # string, ID for the specific sales agent associated with the shs device\n\"seller_name_p\": ***,  # pseudonymized, sales agent name (p14)\n\"seller_name_e\": ***,  # encrypted, sales agent name (p14)\n\"seller_gender\": \"F\", # enum, male (M), female (F), other (O) or unknown (null)\n\"seller_address_p\": ***,  # pseudonymized, sales agend address (p14)\n\"seller_address_e\": ***,  # encrypted, sales agend address (p14)\n\"seller_country\": \"ZM\", # string, two-letter country code according to https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\n\"seller_latitude_b\": 12.203, # float, sales agent's latitude (blurred to 3 decimal points)\n\"seller_latitude_p\": ***,  # pseudonymized, sales agent's latitude (blurred to 3 decimal points)\n\"seller_latitude_e\": ***,  # encrypted, sales agent's latitude (blurred to 3 decimal points)\n\"seller_longitude_b\": -20.678, # float, sales agent's longitude (blurred to 3 decimal points)\n\"seller_longitude_p\": ***,  # pseudonymized, sales agent's longitude (blurred to 3 decimal points)\n\"seller_longitude_e\": ***,  # encrypted, sales agent's longitude (blurred to 3 decimal points)\n\"seller_email_p\": ***,  # pseudonymized, sales agent email (p14)\n\"seller_email_e\": ***,  # encrypted, sales agent email (p14)\n\"seller_phone_p\": ***,  # pseudonymized, sales agent telephone (p14)\n\"seller_phone_e\": ***,  # encrypted, sales agent telephone (p14)\n\"seller_location_area_1\": \"Copperbelt\", # string, sales agent first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"seller_location_area_2\": \"Mazabuka\", # string, sales agent second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"seller_location_area_3\": \"Chizobo\", # string, sales agent third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"seller_location_area_4\": \"Chizobo\", # string, sales agent fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country\n\"device_uid\": \"1_a2ei_ABC123\", # string, organization_id + manufacturer + serial_number\n\"customer_uid\": \"1_api_123\", # string, organization_id + data_origin + customer_external_id\n\"account_uid\": \"1_api_123\", # string, organization_id + data_origin + account_external_id\n\"id\": \"1\", # integer, Internal primary key\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n\"last_import_id\": \"337\", # integer, Id of the last import which updated the record\n\"last_source_id\": \"33\", # integer, Id of the last Source which updated the record\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutShs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/shs_ts": {
+        "get": {
+          "summary": "shs_ts",
+          "description": "Time Series data of individual Solar Home Systems",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"device_uid\": \"1-a2ei-ABC123\", # string, organization_id + manufacturer + serial_number; FK from shs table\n\"manufacturer\": \"A2EI\", # string, Manufacturer of the device\n\"serial_number\": \"ABC/123\", # string, Serial of the device\n\"metered_at\": \"2021-05-03 6:23:55\", # datetime, time the metrics apply to (not time of query)\n\"pv_input_w\": 123.456, # float, PV to system in watts\n\"grid_input_w\": 123.456, # float, grid to system in watts\n\"grid_input_v\": 212.7, # float, grid input voltage in volts\n\"battery_v\": 23.6, # float, battery voltage in volts\n\"battery_io_w\": -37.58, # float, battery input / output in watts (\u003E0 = charging)\n\"battery_charge_percent\": 76.8, # float, battery charge level in percentage\n\"system_output_w\": 123.456, # float, system output to customer in watts\n\"grid_energy_lifetime_wh\": 123.456, # float, cumulative energy reading grid to system in watt-hour\n\"grid_energy_interval_wh\": 123.456, # float, energy consumption at time interval grid to system in watt-hour\n\"pv_energy_lifetime_wh\": 123.456, # float, cumulative energy reading PV to system in watt-hour\n\"pv_energy_interval_wh\": 123.456, # float, energy production at time interval PV to system in watt-hour\n\"output_energy_lifetime_wh\": 123.456, # float, cumulative energy reading system to customer in watt-hour\n\"output_energy_interval_wh\": 123.456, # float, energy consumption at time interval system to customer in watt-hour\n\"interval_seconds\": 360, # integer, for remotely monitored systems, interval between measurements\n\"paygo_is_paid_off\": \"true\", # boolean, system is permanently unlocked\n\"paygo_days_left\": 7, # integer, days left until next payment (only used until system is paid off)\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutShsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/out/trust_trace": {
+        "get": {
+          "summary": "trust_trace",
+          "description": "Trust Trace - the results of data validations and checks on subjects from other tables. Populated by data processors.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "updated_at_from",
+              "description": "start of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than the to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "updated_at_to",
+              "description": "end of intervall. The results contain updated_at values equal or greater to the from parameter and lesser or equal than to parameter. [from,to]",
+              "type": "string",
+              "format": "date-time",
+              "required": false
+            },
+            {
+              "in": "query",
+              "name": "size",
+              "description": "Amount of records per page",
+              "type": "integer",
+              "format": "int32",
+              "default": 25,
+              "minimum": 1,
+              "maximum": 100,
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "description": "Request n-th page, must be a positive number",
+              "type": "integer",
+              "format": "int32",
+              "default": 1,
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Example data:\n{\n  \"errors\": [],\n  \"data\": [\n    {\n      \"uid\": \"123-456\", # string, subject_origin + subject_uid + check\n\"subject_origin\": \"meters\", # enum, The data category where we find the subject uid. Basically the table name without data_ prefix\n\"subject_uid\": \"123_456\", # string, The uid of the subject. Referring to the the uid in its origin table.\n\"check\": \"meter_installation_gps_valid\", # string, The name of the check performed\n\"result\": \"ok\", # string, The result of the performed check. Casted as string as it can have various forms depending on what check is performed.\n\"id\": \"1\", # integer, Internal primary key\n\"created_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was inserted\n\"updated_at\": \"2021-05-03 6:23:55\", # datetime, Timestamp when row was updated\n\"source_id\": \"1\", # integer, References Source of data\n\"import_id\": \"1\", # integer, References Import of data\n\"organization_id\": \"1\", # integer, References Organization of data\n\"custom\": \"{ \"some\": \"key\" }\", # jsonb, Saves additional imported data out of standard structure\n\"data_origin\": \"generic\", # string, Origin of the data, generic or name of the api\n\"trust_score\": \"1.2\", # float, calculated value how much we trust data\n\"last_import_id\": \"337\", # integer, Id of the last import which updated the record\n\"last_source_id\": \"33\", # integer, Id of the last Source which updated the record\n    },\n    ...\n  ]\n}\n"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "getV1OutTrustTrace",
+          "deprecated": false
+        }
+      },
+      "/v1/out/odyssey/readings": {
+        "get": {
+          "summary": "Meter readings for all meters in a time interval. Intended for integration with Odyssey pull API.",
+          "description": "This method returns a hash with meta information and a readings array containing information for each meter.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity\n Use the Bearer format with \"Bearer TOKENVALUE\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "FROM",
+              "description": "Beginning of period",
+              "type": "string",
+              "format": "date-time",
+              "default": "2024-07-29T15:52:17.977Z",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "TO",
+              "description": "End of period",
+              "type": "string",
+              "format": "date-time",
+              "default": "2024-07-30T15:52:17.977+00:00",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "id",
+              "description": "Just returns data for given meter id",
+              "type": "string",
+              "required": false
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sample JSON Response: {\n                          ...\n                          \"readings\": [{\n                          \"timestamp\": \"2021-05-17T09:01:13.123Z\",\n                          \"meterId\": \"002B-002-5678\",\n                          \"energyConsumptionKwh\": 0.08,\n                          \"energyReadingKwh\": 2.6\n                          \"timeIntervalMinutes\": 15,\n                          \"customerAccountId\": \"B0002\",\n                          \"customerName\": \"Example Customer 2\",\n                          \"customerPhone\": \"+234 0814 881 9281\",\n                          \"latitude\": \"6.465399\",\n                          \"longitude\": \"3.405100\",\n                          // optional fields\n                          \"rate\": \"1.5\",\n                          \"rateCurrency\": \"Naira\"\n                          }, ...]\n                          }"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "odyssey_endpoint",
+          "deprecated": false
+        }
+      },
+      "/v1/out/odyssey/payments": {
+        "get": {
+          "summary": "Payments in a given time interval. Intended for integration with Odyssey pull API.",
+          "description": "This method returns a hash with meta information and a payments array containing payments.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity\n Use the Bearer format with \"Bearer TOKENVALUE\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "FROM",
+              "description": "Beginning of period",
+              "type": "string",
+              "format": "date-time",
+              "default": "2024-07-29T15:52:17.978Z",
+              "required": true
+            },
+            {
+              "in": "query",
+              "name": "TO",
+              "description": "End of period",
+              "type": "string",
+              "format": "date-time",
+              "default": "2024-07-30T15:52:17.978+00:00",
+              "required": true
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sample JSON Response: {\n                          ...\n                          \"payments\": [{\n                            \"timestamp\": \"2021-05-16T14:16:01.350Z\",\n                            \"amount\": 1000,\n                            \"currency\": \"Naira\",\n                            \"transactionType\": \"FULL_PAYMENT\",\n                            \"meterId\": \"M-001-123\",\n                            \"customerId\": \"customer-123\",\n                            \"customerName\": \"Example mini-grid Customer 1\",\n                            \"customerPhone\": \"+234 0814 777 5555\",\n                            \"transactionId\": \"minigrid-monthly-payment-001\",\n                            \"financingId\": \"REA_NEP_PBG\",\n                            \"agentId\": \"kiosk-001\",\n                            \"latitude\": \"6.555555\",\n                            \"longitude\": \"3.444444\"\n                            }, ...]\n                          }"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "out"
+          ],
+          "operationId": "odyssey_payments_endpoint",
+          "deprecated": false
+        }
+      },
+      "/v1/in/custom": {
+        "post": {
+          "summary": "custom",
+          "description": "This tables saves completely custom data as json. For easier export and graphing per source views with customizable structure are automatically created.",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InCustom",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InCustom"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "custom"
+            },
+            "202": {
+              "description": "custom"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InCustom",
+          "deprecated": false
+        }
+      },
+      "/v1/in/grids": {
+        "post": {
+          "summary": "grids",
+          "description": "Static data about electrical grids - minigrids as well as national grids",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InGrids",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InGrids"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "grids"
+            },
+            "202": {
+              "description": "grids"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InGrids",
+          "deprecated": false
+        }
+      },
+      "/v1/in/grids_ts": {
+        "post": {
+          "summary": "grids_ts",
+          "description": "Time Series data of individual grids",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InGridsTs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InGridsTs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "grids_ts"
+            },
+            "202": {
+              "description": "grids_ts"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InGridsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/in/meter_events_ts": {
+        "post": {
+          "summary": "meter_events_ts",
+          "description": "Time Series data of events processed from meters_ts",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InMeterEventsTs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InMeterEventsTs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "meter_events_ts"
+            },
+            "202": {
+              "description": "meter_events_ts"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InMeterEventsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/in/meters": {
+        "post": {
+          "summary": "meters",
+          "description": "Represents installations of on-grid or mini-grid meters at a specific customer.",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InMeters",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InMeters"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "meters"
+            },
+            "202": {
+              "description": "meters"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InMeters",
+          "deprecated": false
+        }
+      },
+      "/v1/in/meters_ts": {
+        "post": {
+          "summary": "meters_ts",
+          "description": "Time Series data of individual meters",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InMetersTs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InMetersTs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "meters_ts"
+            },
+            "202": {
+              "description": "meters_ts"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InMetersTs",
+          "deprecated": false
+        }
+      },
+      "/v1/in/paygo_accounts_snapshots_ts": {
+        "post": {
+          "summary": "paygo_accounts_snapshots_ts",
+          "description": "Time Series data of events processed from meters_ts",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InPaygoAccountsSnapshotsTs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InPaygoAccountsSnapshotsTs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "paygo_accounts_snapshots_ts"
+            },
+            "202": {
+              "description": "paygo_accounts_snapshots_ts"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InPaygoAccountsSnapshotsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/in/payments_ts": {
+        "post": {
+          "summary": "payments_ts",
+          "description": "Payment time series data for SHS Accounts or Meter Accounts",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InPaymentsTs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InPaymentsTs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "payments_ts"
+            },
+            "202": {
+              "description": "payments_ts"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InPaymentsTs",
+          "deprecated": false
+        }
+      },
+      "/v1/in/shs": {
+        "post": {
+          "summary": "shs",
+          "description": "Represents installations of Solar Home Systems at individual customers",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InShs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InShs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "shs"
+            },
+            "202": {
+              "description": "shs"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InShs",
+          "deprecated": false
+        }
+      },
+      "/v1/in/shs_ts": {
+        "post": {
+          "summary": "shs_ts",
+          "description": "Time Series data of individual Solar Home Systems",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "Authorization",
+              "description": "Validates your identity. Use the Bearer format with \"Bearer APISECRET\"",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "postV1InShsTs",
+              "in": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/postV1InShsTs"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "shs_ts"
+            },
+            "202": {
+              "description": "shs_ts"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          },
+          "tags": [
+            "in"
+          ],
+          "operationId": "postV1InShsTs",
+          "deprecated": false
+        }
+      }
+    },
+    "definitions": {
+      "Api_Entities_SmMetaData": {
+        "type": "object",
+        "properties": {
+          "meter_id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Unique Meter Identifier"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of entity where meter is installed"
+          },
+          "district": {
+            "type": "string",
+            "description": "Geographical District"
+          },
+          "type_of_network": {
+            "type": "string",
+            "description": "Either Grid or Off-Grid"
+          },
+          "type_of_smartmeter": {
+            "type": "string",
+            "description": "Single or Multiphase Meter"
+          },
+          "power_reading": {
+            "type": "string"
+          },
+          "appliances": {
+            "type": "object",
+            "description": "List of appliances that are installed and metered"
+          },
+          "facilities": {
+            "type": "string"
+          },
+          "longitude": {
+            "type": "string",
+            "description": "Geographical Longitude"
+          },
+          "latitude": {
+            "type": "string",
+            "description": "Geographical Latitude"
+          },
+          "installed_at": {
+            "type": "string",
+            "description": "Date when the meter was installed"
+          }
+        },
+        "description": "Api_Entities_SmMetaData model"
+      },
+      "postV1InCustom": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "external_id": {
+                  "type": "string",
+                  "description": "An external ID used for updates and deduplication. Either provided or autogenerated during ingress.",
+                  "example": "auto-fvhrznelo482"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "custom"
+      },
+      "postV1InGrids": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "external_id": {
+                  "type": "string",
+                  "description": "ID for the specific (mini-)grid as tracked by the data provider (source)",
+                  "example": "X98679862w"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "name of the (mini-)grid, typically given by operator company",
+                  "example": "SMU 12 Chinsanka"
+                },
+                "operator_company": {
+                  "type": "string",
+                  "description": "name of the company which operates the (mini-)grid",
+                  "example": "Standard Microgrid"
+                },
+                "location_area_1": {
+                  "type": "string",
+                  "description": "(mini-)grid first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Luapola"
+                },
+                "location_area_2": {
+                  "type": "string",
+                  "description": "(mini-)grid second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Samfya"
+                },
+                "location_area_3": {
+                  "type": "string",
+                  "description": "(mini-)grid third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "None"
+                },
+                "location_area_4": {
+                  "type": "string",
+                  "description": "(mini-)grid fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "None"
+                },
+                "country": {
+                  "type": "string",
+                  "description": "two-letter country code according to ISO 3166-1 alpha-2",
+                  "example": "TZ"
+                },
+                "latitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "geo location latitude",
+                  "example": 5.432
+                },
+                "longitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "geo location longitude",
+                  "example": 2.345
+                },
+                "power_rating_kw": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "highest power input allowed to flow through inverter in kilowatt",
+                  "example": 2.8
+                },
+                "primary_input_installed_kw": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "sum of installed primary peak power in kilowatt",
+                  "example": 2.5
+                },
+                "secondary_input_installed_kw": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "sum of installed secondary peak power in kilowatt",
+                  "example": 3.2
+                },
+                "primary_input_source": {
+                  "type": "string",
+                  "description": "e.g. solar",
+                  "example": "solar"
+                },
+                "secondary_input_source": {
+                  "type": "string",
+                  "description": "e.g. diesel generator",
+                  "example": "diesel generator"
+                },
+                "is_offgrid": {
+                  "type": "boolean",
+                  "description": "indicates whether the grid is a national grid (FALSE) or a mini-grid (TRUE)",
+                  "example": true
+                },
+                "storage_capacity_kwh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "maximum storage capacity in kilowatt hour",
+                  "example": 5.8
+                },
+                "operator_phone": {
+                  "type": "string",
+                  "description": "operator telephone (p14)",
+                  "example": "0123456789 will be - stored as c340f947f1f7cb83c8f40bb5a7ad24ca78486bdfb2ef587f55ea537de17efc27"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "grids"
+      },
+      "postV1InGridsTs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "grid_name": {
+                  "type": "string",
+                  "description": "Name of of the (mini-)grid, used to build the grid_uid",
+                  "example": "SMU 12 Chinsanka"
+                },
+                "metered_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "time the metrics apply to (not time of query)",
+                  "example": "2022-01-01 13:00:00.000Z"
+                },
+                "primary_source_to_customer_kwh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "PV to consumers in kilowatt hour",
+                  "example": 5.234
+                },
+                "primary_source_to_battery_kwh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "PV to battery in kilowatt hour",
+                  "example": 0
+                },
+                "secondary_source_to_customer_kwh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "genset to consumers in kilowatt hour",
+                  "example": 1.1
+                },
+                "secondary_source_to_battery_kwh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "genset to battery in kilowatt hour (will probably be 0)",
+                  "example": 0
+                },
+                "battery_to_customer_kwh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "battery to consumers in kilowatt hour",
+                  "example": 10.234
+                },
+                "battery_charge_state_percent": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "battery charge level in percentage",
+                  "example": 88.2
+                },
+                "interval_seconds": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "interval for kilowatt hour",
+                  "example": 3600
+                },
+                "households_connected": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "statistic that is calculated based on separate raw data",
+                  "example": 245
+                }
+              },
+              "required": [
+                "grid_name",
+                "metered_at"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "grids_ts"
+      },
+      "postV1InMeterEventsTs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "manufacturer": {
+                  "type": "string",
+                  "description": "Manufacturer of the device",
+                  "example": "A2EI"
+                },
+                "serial_number": {
+                  "type": "string",
+                  "description": "Serial of the device",
+                  "example": "ABC/123"
+                },
+                "start_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "time the event started",
+                  "example": "2021-05-03 6:23:55"
+                },
+                "end_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "time the event ended",
+                  "example": "2021-05-03 8:11:21"
+                },
+                "duration_sec": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "time the event was lasting rounded to seconds",
+                  "example": 32443
+                },
+                "energy_start_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy value at start time in watt-hour",
+                  "example": 1646.5
+                },
+                "energy_end_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy value at end time in watt-hour",
+                  "example": 1758.9
+                },
+                "energy_consumed_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy value used for the event watt-hour",
+                  "example": 112.4
+                },
+                "category": {
+                  "type": "string",
+                  "description": "type of event",
+                  "example": "cooking"
+                }
+              },
+              "required": [
+                "manufacturer",
+                "serial_number",
+                "start_at",
+                "end_at",
+                "category"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "meter_events_ts"
+      },
+      "postV1InMeters": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "customer_external_id": {
+                  "type": "string",
+                  "description": "ID for the specific customer associated with the meter",
+                  "example": 1
+                },
+                "customer_name": {
+                  "type": "string",
+                  "description": "customer first and last name (p14)",
+                  "example": "John Smith - stored as 7c6e6899401b76f23d4eaf4931975872f1b5d9ae026b8b8213a25cf7812d936b"
+                },
+                "customer_id_number": {
+                  "type": "string",
+                  "description": "customer identification number",
+                  "example": "L23FX1236 - stored as 6a099e5c63f0138de7b3dfa7e03c17e551ea23e53c6399a2f0d490d5d87457de"
+                },
+                "customer_id_type": {
+                  "type": "string",
+                  "description": "type of customer identification",
+                  "example": "National ID"
+                },
+                "customer_gender": {
+                  "type": "string",
+                  "description": "Male, Female, Other, or Unknown (null)",
+                  "enum": [
+                    "M",
+                    "F",
+                    "O"
+                  ],
+                  "example": "M"
+                },
+                "customer_birth_year": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "year of purchaser birth, for demographic analysis",
+                  "example": 1990
+                },
+                "customer_former_electricity_source": {
+                  "type": "string",
+                  "description": "e.g. none, solar, genset",
+                  "example": "none"
+                },
+                "customer_household_size": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "number of residents of household (if residential use)",
+                  "example": 5
+                },
+                "customer_profession": {
+                  "type": "string",
+                  "description": "Profession of the customer - e.g. farmer or shop owner",
+                  "example": "farmer"
+                },
+                "customer_address": {
+                  "type": "string",
+                  "description": "customer address",
+                  "example": "Some Street 123, Example Village - stored as 452a20d7b82bd6ad82f0bf482f382bfe55f90dcb140e1e79d38b15a4450770d7"
+                },
+                "customer_country": {
+                  "type": "string",
+                  "description": "two-letter country code according to ISO 3166-1 alpha-2",
+                  "example": "ZM"
+                },
+                "customer_latitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "customer latitude (blurred to 3 decimal points)",
+                  "example": "12.123"
+                },
+                "customer_longitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "customer longitude (blurred to 3 decimal points)",
+                  "example": 20.456
+                },
+                "customer_email": {
+                  "type": "string",
+                  "description": "customer email (p14)",
+                  "example": "test@example.com - stored as b37645e1cc4bc50636c11a9a19566f2ae56764333789159dacb171580c42e49b"
+                },
+                "customer_phone": {
+                  "type": "string",
+                  "description": "customer telephone (p14)",
+                  "example": "0123456789 - stored as c340f947f1f7cb83c8f40bb5a7ad24ca78486bdfb2ef587f55ea537de17efc27"
+                },
+                "customer_phone_2": {
+                  "type": "string",
+                  "description": "customer telephone 2 (p14)",
+                  "example": "0123456789 - stored as c340f947f1f7cb83c8f40bb5a7ad24ca78486bdfb2ef587f55ea537de17efc27"
+                },
+                "customer_location_area_1": {
+                  "type": "string",
+                  "description": "customer first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Western"
+                },
+                "customer_location_area_2": {
+                  "type": "string",
+                  "description": "customer second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Bundibugyo"
+                },
+                "customer_location_area_3": {
+                  "type": "string",
+                  "description": "customer third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Bughendera County"
+                },
+                "customer_location_area_4": {
+                  "type": "string",
+                  "description": "customer fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Bukonzo"
+                },
+                "customer_location_area_5": {
+                  "type": "string",
+                  "description": "customer fifth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Buhundu"
+                },
+                "device_external_id": {
+                  "type": "string",
+                  "description": "ID for the specific meter tracked by the data provider (source)",
+                  "example": "1234"
+                },
+                "serial_number": {
+                  "type": "string",
+                  "description": "serial number of system",
+                  "example": "A1233754345JL"
+                },
+                "installation_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "date system was installed",
+                  "example": "2021-01-01"
+                },
+                "purchase_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "if meter is part of an installation - date system was purchased",
+                  "example": "2022-01-01"
+                },
+                "firmware_version": {
+                  "type": "string",
+                  "description": "firmware version installed on the smart meter / modem",
+                  "example": "1.2-rc3"
+                },
+                "manufacturer": {
+                  "type": "string",
+                  "description": "manufacturer of system, needed to make ID when combined with serial number",
+                  "example": "HOP"
+                },
+                "model": {
+                  "type": "string",
+                  "description": "specific model of system",
+                  "example": "DTZ1737"
+                },
+                "customer_category": {
+                  "type": "string",
+                  "description": "how the system is to be used: \\\"household\\\", \\\"institutional\\\", \\\"commercial\\\"",
+                  "example": "commercial"
+                },
+                "customer_sub_category": {
+                  "type": "string",
+                  "description": "which type of business, which institution",
+                  "example": "barber shop"
+                },
+                "account_external_id": {
+                  "type": "string",
+                  "description": "ID for the specific account (e.g. paygo loan) associated with the meter",
+                  "example": "11223344"
+                },
+                "payment_plan": {
+                  "type": "string",
+                  "description": "monthly or annual payment plan - e.g. Medium Consumption or High Consumption, paygo or cash",
+                  "example": "Medium Consumption"
+                },
+                "payment_plan_days": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "if meter is part of an installation with loan - repayment plan of loan",
+                  "example": 720.5
+                },
+                "payment_plan_down_payment": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "if meter is part of an installation with loan - amount paid at time of purchase",
+                  "example": 1500
+                },
+                "payment_plan_amount_financed": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "if meter is part of an installation with loan - amount to be repaid after down payment",
+                  "example": 1500
+                },
+                "total_price": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Total sales price of the device",
+                  "example": 130000
+                },
+                "payment_plan_currency": {
+                  "type": "string",
+                  "description": "if meter is part of an installation with loan - currency code of payment plan, in ISO 4217 three character format",
+                  "example": "ZMW"
+                },
+                "primary_use": {
+                  "type": "string",
+                  "description": "what type of appliance (if any) is attached? - e.g. cooking, milling, tv",
+                  "example": "cooking"
+                },
+                "repossession_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "date system was repossessed, null if not repossessed",
+                  "example": "2022-01-01"
+                },
+                "is_locked": {
+                  "type": "boolean",
+                  "description": "no energy coming through",
+                  "example": "FALSE"
+                },
+                "max_power_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "max connection max load in watts",
+                  "example": 5000
+                },
+                "is_test": {
+                  "type": "boolean",
+                  "description": "Is the system installed in the fiel (FALSE) or for testing purposes (TRUE)",
+                  "example": true
+                },
+                "grid_name": {
+                  "type": "string",
+                  "description": "name of the (mini-)grid the meter is connected to, typically given by operator company. Used to identifies the grid.",
+                  "example": "SMU 12 Chinsanka"
+                }
+              },
+              "required": [
+                "customer_external_id",
+                "device_external_id",
+                "serial_number",
+                "manufacturer"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "meters"
+      },
+      "postV1InMetersTs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "manufacturer": {
+                  "type": "string",
+                  "description": "Manufacturer of the device",
+                  "example": "A2EI"
+                },
+                "serial_number": {
+                  "type": "string",
+                  "description": "Serial of the device",
+                  "example": "ABC/123"
+                },
+                "metered_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "time the metrics apply to (not time of query)",
+                  "example": "2021-05-03 6:23:55"
+                },
+                "phase": {
+                  "type": "string",
+                  "description": "1,2,3; default: 1",
+                  "enum": [
+                    "1",
+                    "2",
+                    "3"
+                  ],
+                  "example": "1"
+                },
+                "voltage_v": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "voltage in volts",
+                  "example": 164.65
+                },
+                "power_factor": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "ratio of working power to the apparent power, value between from 0 and 1",
+                  "example": 0.45
+                },
+                "power_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "power in watts",
+                  "example": 1489.6
+                },
+                "energy_lifetime_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "cumulative energy reading in watt-hour",
+                  "example": 12473.02
+                },
+                "energy_interval_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy consumption at time interval in watt-hour",
+                  "example": 51.04
+                },
+                "frequency_hz": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "frequency in hertz",
+                  "example": 58.93
+                },
+                "current_a": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "current in ampere",
+                  "example": 22.61
+                },
+                "interval_seconds": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "for remotely monitored systems, interval between measurements",
+                  "example": 360
+                },
+                "billing_cycle_start_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "timestamp on which the tariff cycle starts",
+                  "example": "2021-04-05"
+                }
+              },
+              "required": [
+                "manufacturer",
+                "serial_number",
+                "metered_at"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "meters_ts"
+      },
+      "postV1InPaygoAccountsSnapshotsTs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "snapshot_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "Date for which snapshot is calculated for.",
+                  "example": "2021-05-03"
+                },
+                "account_status": {
+                  "type": "string",
+                  "description": "active, completed, defaulted, cancelled, locked, returned",
+                  "enum": [
+                    "active",
+                    "completed",
+                    "defaulted",
+                    "cancelled",
+                    "locked",
+                    "returned"
+                  ],
+                  "example": "active"
+                },
+                "days_in_repayment": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "When negative: Days until paygo period starts - account is in downpayment period.  Then counts up from zero when paygo repayment period starts.",
+                  "example": 5
+                },
+                "cumulative_paid_amount": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "The accumulated amount the customer paid to this snapshot date.",
+                  "example": 500
+                },
+                "days_to_cutoff": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "How many days until system will switch off. Negative if locked for N days.",
+                  "example": 7
+                },
+                "cumulative_days_locked": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "How many days system was off over its lifetime.",
+                  "example": 2
+                },
+                "total_remaining_amount": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "How much money is left to payoff the system.",
+                  "example": 4500
+                },
+                "account_external_id": {
+                  "type": "string",
+                  "description": "id for the specific account (e.g. paygo loan) associated with the shs device; FK to accounts table",
+                  "example": "11223344"
+                }
+              },
+              "required": [
+                "snapshot_date",
+                "account_status",
+                "days_in_repayment",
+                "cumulative_paid_amount",
+                "days_to_cutoff",
+                "cumulative_days_locked",
+                "total_remaining_amount",
+                "account_external_id"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "paygo_accounts_snapshots_ts"
+      },
+      "postV1InPaymentsTs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "payment_external_id": {
+                  "type": "string",
+                  "description": "ID for the specific payment as tracked by the data provider (source)",
+                  "example": "ABC-123"
+                },
+                "purpose": {
+                  "type": "string",
+                  "description": "e.g.: Paygo payment, Loan repayment, cash purchase, tariff payment, etc.",
+                  "example": "Paygo Payment"
+                },
+                "paid_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "date payment was made (including time if available)",
+                  "example": "2022-07-30 14:45:32.876Z"
+                },
+                "amount": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "amount of payment, in whatever currency is specified",
+                  "example": 150.5
+                },
+                "currency": {
+                  "type": "string",
+                  "description": "currency in which payment was made according to ISO code https://en.wikipedia.org/wiki/List_of_circulating_currencies",
+                  "example": "ZMW"
+                },
+                "purchase_item": {
+                  "type": "string",
+                  "description": "item or rate which was purchased with the payment, e.g. 'Energy', 'TV', 'Uptime'",
+                  "example": "Uptime"
+                },
+                "purchase_unit": {
+                  "type": "string",
+                  "description": "unit of the purchase, e.g. 'wh', 'pcs', 'days'",
+                  "example": "days"
+                },
+                "purchase_quantity": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "amount of units of the item purchased",
+                  "example": 3
+                },
+                "provider_name": {
+                  "type": "string",
+                  "description": "who provided payment for particular payment (e.g. airtel, cash, MTN)",
+                  "example": "MTN"
+                },
+                "provider_transaction_id": {
+                  "type": "string",
+                  "description": "data validation, was transaction actually done",
+                  "example": "12345X"
+                },
+                "reverted_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "datetime of when payment was reverted",
+                  "example": "2022-07-30 14:48:20.876Z"
+                },
+                "days_active": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "information from shs table, is calculated",
+                  "example": 7.2
+                },
+                "account_external_id": {
+                  "type": "string",
+                  "description": "external id for the specific account (e.g. paygo loan) associated with the shs or meter",
+                  "example": "1234abcd"
+                },
+                "account_origin": {
+                  "type": "string",
+                  "description": "The table where we find the matching account_uid",
+                  "enum": [
+                    "meters",
+                    "shs"
+                  ],
+                  "example": "meters"
+                }
+              },
+              "required": [
+                "payment_external_id",
+                "paid_at",
+                "amount",
+                "currency",
+                "account_external_id",
+                "account_origin"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "payments_ts"
+      },
+      "postV1InShs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "device_external_id": {
+                  "type": "string",
+                  "description": "id for the specific shs system as tracked by the data provider (source)",
+                  "example": "x98679862w"
+                },
+                "account_external_id": {
+                  "type": "string",
+                  "description": "id for the specific account (e.g. paygo loan) associated with the shs device",
+                  "example": "11223344"
+                },
+                "serial_number": {
+                  "type": "string",
+                  "description": "serial number of system",
+                  "example": "a1233754345jl"
+                },
+                "purchase_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "date system was purchased",
+                  "example": "2022-01-01"
+                },
+                "manufacturer": {
+                  "type": "string",
+                  "description": "manufacturer of system, needed to make id when combined with serial number",
+                  "example": "Spark"
+                },
+                "model": {
+                  "type": "string",
+                  "description": "model of system, needed e.g. for matching eligible systems of an rbf program",
+                  "example": "SMRSD"
+                },
+                "pv_power_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "PV panel size in watts",
+                  "example": 30
+                },
+                "battery_energy_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "battery capacity in watt-hour",
+                  "example": 500
+                },
+                "voltage_v": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "system voltage in volts; e.g. - 5, 12 if DC or 110, 230 if AC",
+                  "example": 12
+                },
+                "rated_power_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "max rated capacity in watts",
+                  "example": 30
+                },
+                "customer_category": {
+                  "type": "string",
+                  "description": "how the system is to be used: \\\"household\\\", \\\"institutional\\\", \\\"commercial\\\"",
+                  "example": "commercial"
+                },
+                "customer_sub_category": {
+                  "type": "string",
+                  "description": "which type of business, which institution",
+                  "example": "barber shop"
+                },
+                "primary_use": {
+                  "type": "string",
+                  "description": "what appliance is the main load of system",
+                  "example": "refrigerator"
+                },
+                "payment_plan_days": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "repayment plan of system/loan",
+                  "example": 720.5
+                },
+                "payment_plan_down_payment": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "amount paid at time of purchase, total cost if paid in full at purchase",
+                  "example": 1500
+                },
+                "payment_plan_amount_financed": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "amount to be repaid after down payment, 0 if paid in full at purchase",
+                  "example": 1500
+                },
+                "total_price": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "Total sales price of the device",
+                  "example": 130000
+                },
+                "payment_plan_type": {
+                  "type": "string",
+                  "description": "\\\"paygo\\\" or \\\"full\\\" if paid in full at purchase",
+                  "example": "paygo"
+                },
+                "payment_plan_currency": {
+                  "type": "string",
+                  "description": "currency code of payment plan, in ISO 4217 three character format",
+                  "example": "ZMW"
+                },
+                "paid_off_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "date system was paid off, null if not paid off",
+                  "example": "2022-05-14"
+                },
+                "repossession_date": {
+                  "type": "string",
+                  "format": "date",
+                  "description": "date system was repossessed, null if not repossessed",
+                  "example": "2022-03-20"
+                },
+                "is_test": {
+                  "type": "boolean",
+                  "description": "is a test system, should be excluded in overall analyses",
+                  "example": "false"
+                },
+                "customer_external_id": {
+                  "type": "string",
+                  "description": "ID for the specific customer associated with the shs device",
+                  "example": "123"
+                },
+                "customer_name": {
+                  "type": "string",
+                  "description": "customer first and last name (p14)",
+                  "example": "John Smith - stored as 7c6e6899401b76f23d4eaf4931975872f1b5d9ae026b8b8213a25cf7812d936b"
+                },
+                "customer_id_number": {
+                  "type": "string",
+                  "description": "customer identification number",
+                  "example": "L23FX1236 - stored as 6a099e5c63f0138de7b3dfa7e03c17e551ea23e53c6399a2f0d490d5d87457de"
+                },
+                "customer_id_type": {
+                  "type": "string",
+                  "description": "type of customer identification",
+                  "example": "National ID"
+                },
+                "customer_gender": {
+                  "type": "string",
+                  "description": "Male, Female, Other, or Unknown (null)",
+                  "enum": [
+                    "M",
+                    "F",
+                    "O"
+                  ],
+                  "example": "M"
+                },
+                "customer_birth_year": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "year of purchaser birth, for demographic analysis",
+                  "example": 1990
+                },
+                "customer_former_electricity_source": {
+                  "type": "string",
+                  "description": "e.g. none, solar, genset",
+                  "example": "none"
+                },
+                "customer_household_size": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "Number of residents of household (if residential use)",
+                  "example": 5
+                },
+                "customer_profession": {
+                  "type": "string",
+                  "description": "profession of customer - e.g. farmer or shop owner",
+                  "example": "farmer"
+                },
+                "customer_address": {
+                  "type": "string",
+                  "description": "customer address (p14)",
+                  "example": "Some Street 123, Example Village - stored as 452a20d7b82bd6ad82f0bf482f382bfe55f90dcb140e1e79d38b15a4450770d7"
+                },
+                "customer_country": {
+                  "type": "string",
+                  "description": "two-letter country code according to https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2",
+                  "example": "ZM"
+                },
+                "customer_latitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "customer latitude (blurred to 3 decimal points)",
+                  "example": 12.123
+                },
+                "customer_longitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "customer longitude (blurred to 3 decimal points)",
+                  "example": -20.456
+                },
+                "customer_email": {
+                  "type": "string",
+                  "description": "customer email (p14)",
+                  "example": "test@example.com - stored as b37645e1cc4bc50636c11a9a19566f2ae56764333789159dacb171580c42e49b"
+                },
+                "customer_phone": {
+                  "type": "string",
+                  "description": "customer telephone (p14)",
+                  "example": "0123456789 - stored as c340f947f1f7cb83c8f40bb5a7ad24ca78486bdfb2ef587f55ea537de17efc27"
+                },
+                "customer_phone_2": {
+                  "type": "string",
+                  "description": "customer telephone 2 (p14)",
+                  "example": "0123456789 - stored as c340f947f1f7cb83c8f40bb5a7ad24ca78486bdfb2ef587f55ea537de17efc27"
+                },
+                "customer_location_area_1": {
+                  "type": "string",
+                  "description": "customer first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Western"
+                },
+                "customer_location_area_2": {
+                  "type": "string",
+                  "description": "customer second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Bundibugyo"
+                },
+                "customer_location_area_3": {
+                  "type": "string",
+                  "description": "customer third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Bughendera County"
+                },
+                "customer_location_area_4": {
+                  "type": "string",
+                  "description": "customer fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Bukonzo"
+                },
+                "customer_location_area_5": {
+                  "type": "string",
+                  "description": "customer fifth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Buhundu"
+                },
+                "seller_external_id": {
+                  "type": "string",
+                  "description": "ID for the specific sales agent associated with the shs device",
+                  "example": "12345"
+                },
+                "seller_name": {
+                  "type": "string",
+                  "description": "sales agent name (p14)",
+                  "example": "John Smith - stored as 7c6e6899401b76f23d4eaf4931975872f1b5d9ae026b8b8213a25cf7812d936b"
+                },
+                "seller_gender": {
+                  "type": "string",
+                  "description": "male (M), female (F), other (O) or unknown (null)",
+                  "enum": [
+                    "M",
+                    "F",
+                    "O"
+                  ],
+                  "example": "F"
+                },
+                "seller_address": {
+                  "type": "string",
+                  "description": "sales agend address (p14)",
+                  "example": "Some Street 123, Example Village - stored as 452a20d7b82bd6ad82f0bf482f382bfe55f90dcb140e1e79d38b15a4450770d7"
+                },
+                "seller_country": {
+                  "type": "string",
+                  "description": "two-letter country code according to https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2",
+                  "example": "ZM"
+                },
+                "seller_latitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "sales agent's latitude (blurred to 3 decimal points)",
+                  "example": 12.203
+                },
+                "seller_longitude": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "sales agent's longitude (blurred to 3 decimal points)",
+                  "example": -20.678
+                },
+                "seller_email": {
+                  "type": "string",
+                  "description": "sales agent email (p14)",
+                  "example": "test@example.com - stored as b37645e1cc4bc50636c11a9a19566f2ae56764333789159dacb171580c42e49b"
+                },
+                "seller_phone": {
+                  "type": "string",
+                  "description": "sales agent telephone (p14)",
+                  "example": "0123456789 - stored as c340f947f1f7cb83c8f40bb5a7ad24ca78486bdfb2ef587f55ea537de17efc27"
+                },
+                "seller_location_area_1": {
+                  "type": "string",
+                  "description": "sales agent first-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Copperbelt"
+                },
+                "seller_location_area_2": {
+                  "type": "string",
+                  "description": "sales agent second-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Mazabuka"
+                },
+                "seller_location_area_3": {
+                  "type": "string",
+                  "description": "sales agent third-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Chizobo"
+                },
+                "seller_location_area_4": {
+                  "type": "string",
+                  "description": "sales agent fourth-level location according to Administrative division, see https://en.wikipedia.org/wiki/List_of_administrative_divisions_by_country",
+                  "example": "Chizobo"
+                }
+              },
+              "required": [
+                "device_external_id",
+                "account_external_id",
+                "serial_number",
+                "manufacturer",
+                "customer_external_id"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "shs"
+      },
+      "postV1InShsTs": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "description": "data",
+            "items": {
+              "type": "object",
+              "properties": {
+                "manufacturer": {
+                  "type": "string",
+                  "description": "Manufacturer of the device",
+                  "example": "A2EI"
+                },
+                "serial_number": {
+                  "type": "string",
+                  "description": "Serial of the device",
+                  "example": "ABC/123"
+                },
+                "metered_at": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "time the metrics apply to (not time of query)",
+                  "example": "2021-05-03 6:23:55"
+                },
+                "pv_input_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "PV to system in watts",
+                  "example": 123.456
+                },
+                "grid_input_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "grid to system in watts",
+                  "example": 123.456
+                },
+                "grid_input_v": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "grid input voltage in volts",
+                  "example": 212.7
+                },
+                "battery_v": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "battery voltage in volts",
+                  "example": 23.6
+                },
+                "battery_io_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "battery input / output in watts (\u003E0 = charging)",
+                  "example": -37.58
+                },
+                "battery_charge_percent": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "battery charge level in percentage",
+                  "example": 76.8
+                },
+                "system_output_w": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "system output to customer in watts",
+                  "example": 123.456
+                },
+                "grid_energy_lifetime_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "cumulative energy reading grid to system in watt-hour",
+                  "example": 123.456
+                },
+                "grid_energy_interval_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy consumption at time interval grid to system in watt-hour",
+                  "example": 123.456
+                },
+                "pv_energy_lifetime_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "cumulative energy reading PV to system in watt-hour",
+                  "example": 123.456
+                },
+                "pv_energy_interval_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy production at time interval PV to system in watt-hour",
+                  "example": 123.456
+                },
+                "output_energy_lifetime_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "cumulative energy reading system to customer in watt-hour",
+                  "example": 123.456
+                },
+                "output_energy_interval_wh": {
+                  "type": "number",
+                  "format": "float",
+                  "description": "energy consumption at time interval system to customer in watt-hour",
+                  "example": 123.456
+                },
+                "interval_seconds": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "for remotely monitored systems, interval between measurements",
+                  "example": 360
+                },
+                "paygo_is_paid_off": {
+                  "type": "boolean",
+                  "description": "system is permanently unlocked",
+                  "example": true
+                },
+                "paygo_days_left": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "days left until next payment (only used until system is paid off)",
+                  "example": 7
+                }
+              },
+              "required": [
+                "manufacturer",
+                "serial_number",
+                "metered_at"
+              ]
+            }
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "description": "shs_ts"
+      }
+    }
+  }

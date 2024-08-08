@@ -1,0 +1,48 @@
+{
+    "external_id": "Abuja",
+    "name": "Abuja",
+    "operator_company": "UNHCR",
+    "location_area_1": "Abuja",
+    "country": "NG",
+    "latitude": 9.0621466717435,
+    "longitude": 7.52744490642833,
+    "primary_input_source": "genset",
+    "secondary_input_source": "grid",
+    "is_offgrid": false
+  },
+  {
+    "external_id": "TAKUM",
+    "name": "Takum",
+    "operator_company": "UNHCR",
+    "location_area_1": "FO Takum",
+    "country": "NG",
+    "latitude": 7.26436,
+    "longitude": 9.98121,
+    "primary_input_source": "genset",
+    "secondary_input_source": "grid",
+    "is_offgrid": false
+  },
+  {
+    "external_id": "LAGOS",
+    "name": "Lagos",
+    "operator_company": "UNHCR",
+    "location_area_1": "FO Lagos",
+    "country": "NG",
+    "latitude": 6.4435648,
+    "longitude": 3.4103381,
+    "primary_input_source": "genset",
+    "secondary_input_source": "grid",
+    "is_offgrid": false
+  },
+  {
+    "external_id": "OGOJA",
+    "name": "Ogoja",
+    "operator_company": "UNHCR",
+    "location_area_1": "SO Ogoja",
+    "country": "NG",
+    "latitude": 6.6440095,
+    "longitude": 8.7968883,
+    "primary_input_source": "genset",
+    "secondary_input_source": "grid",
+    "is_offgrid": false
+  }
